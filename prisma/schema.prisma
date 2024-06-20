@@ -58,27 +58,27 @@ model Appointment {
   doctorId        Int
   createdAt       DateTime @default(now()) @db.Timestamp(0)
   appointmentTime DateTime
-  status          Status   @map("appointment_status")
+  status          Status   @default(PENDING) @map("appointment_status")
 
   user   User   @relation(fields: [userId], references: [id])
   doctor Doctor @relation(fields: [doctorId], references: [id])
 }
 
 model Doctor {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   clinicId  Int
-  firstName String @map("doctor_firstName") @db.VarChar(50)
-  lastName  String @map("doctor_lastName") @db.VarChar(50)
-  age       Int    @map("doctor_age")
-  education String @map("doctor_education") @db.VarChar(50)
-  image     String @map("doctor_image") @db.VarChar(256)
+  firstName String  @map("doctor_firstName") @db.VarChar(50)
+  lastName  String  @map("doctor_lastName") @db.VarChar(50)
+  age       Int     @map("doctor_age")
+  education String  @map("doctor_education") @db.VarChar(50)
+  image     String? @map("doctor_image") @db.VarChar(256)
 
   clinic Clinic @relation(fields: [clinicId], references: [id])
 
   Appointment         Appointment[]
   Medical_History     MedicalHistory[]
   MedicineCertificate MedicineCertificate[]
-  Doctorime           Doctorime[]
+  Doctorime           DoctorTime[]
 }
 
 enum Day {
@@ -96,12 +96,12 @@ enum Time {
   AFTERNOON
 }
 
-model Doctorime {
-  id       Int       @id @default(autoincrement())
+model DoctorTime {
+  id       Int      @id @default(autoincrement())
   doctorId Int
-  date     DateTime? @map("doctor_dateTime")
-  day      Day?      @map("doctor_day")
-  time     Time      @map("doctor_time")
+  date     DateTime @map("doctor_dateTime")
+  day      Day      @map("doctor_day")
+  time     Time     @map("doctor_time")
 
   doctor Doctor  @relation(fields: [doctorId], references: [id])
   Queue  Queue[]
@@ -114,14 +114,14 @@ model Queue {
   userId       Int
   doctorTimeId Int
 
-  user       User      @relation(fields: [userId], references: [id])
-  doctorTime Doctorime @relation(fields: [doctorTimeId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  doctorTime DoctorTime @relation(fields: [doctorTimeId], references: [id])
 }
 
 model Clinic {
-  id     Int    @id @default(autoincrement())
-  name   String @map("clinic_name") @db.VarChar(50)
-  detail String @db.VarChar(512)
+  id     Int     @id @default(autoincrement())
+  name   String  @map("clinic_name") @db.VarChar(50)
+  detail String? @db.VarChar(512)
 
   Doctor Doctor[]
 }
@@ -157,7 +157,7 @@ model MedicalHistory {
   createdAt       DateTime @default(now()) @db.Timestamp(0)
   summary         String   @db.VarChar(256)
   cureStatus      Cure     @map("cure_status")
-  paymentStatus   Payment  @map("payment_status")
+  paymentStatus   Payment  @default(TREATMENT) @map("payment_status")
 
   user      User     @relation(fields: [userId], references: [id])
   doctor    Doctor   @relation(fields: [doctorId], references: [id])
