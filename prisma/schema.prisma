@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,211 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  patientId   String    @unique @db.VarChar(50)
+  password    String    @map("user_password") @db.VarChar(50)
+  firstName   String    @map("user_firstName") @db.VarChar(30)
+  lastName    String    @map("User_lastName") @db.VarChar(30)
+  phone       Int       @map("user_phone")
+  email       String    @map("user_email") @db.VarChar(50)
+  address     String?   @map("user_address") @db.VarChar(256)
+  birthDate   DateTime?
+  nationality String?   @db.VarChar(30)
+  gender      Gender    @map("user_gender")
+
+  Medical_History     MedicalHistory[]
+  Appointment         Appointment[]
+  MedicineCertificate MedicineCertificate[]
+  Queue               Queue[]
+}
+
+enum AdminRole {
+  account
+  doctor
+  nurse
+  reception
+}
+
+model Admin {
+  id       Int       @id @default(autoincrement())
+  role     AdminRole @map("admin_role")
+  account  String    @map("admin_account") @db.VarChar(50)
+  password String    @map("admin_password") @db.VarChar(128)
+}
+
+enum Status {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+model Appointment {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  doctorId        Int
+  createdAt       DateTime @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime
+  status          Status   @map("appointment_status")
+
+  user   User   @relation(fields: [userId], references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model Doctor {
+  id        Int    @id @default(autoincrement())
+  clinicId  Int
+  firstName String @map("doctor_firstName") @db.VarChar(50)
+  lastName  String @map("doctor_lastName") @db.VarChar(50)
+  age       Int    @map("doctor_age")
+  education String @map("doctor_education") @db.VarChar(50)
+  image     String @map("doctor_image") @db.VarChar(256)
+
+  clinic Clinic @relation(fields: [clinicId], references: [id])
+
+  Appointment         Appointment[]
+  Medical_History     MedicalHistory[]
+  MedicineCertificate MedicineCertificate[]
+  Doctorime           Doctorime[]
+}
+
+enum Day {
+  MON
+  TUE
+  WEB
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+enum Time {
+  MORNING
+  AFTERNOON
+}
+
+model Doctorime {
+  id       Int       @id @default(autoincrement())
+  doctorId Int
+  date     DateTime? @map("doctor_dateTime")
+  day      Day?      @map("doctor_day")
+  time     Time      @map("doctor_time")
+
+  doctor Doctor  @relation(fields: [doctorId], references: [id])
+  Queue  Queue[]
+
+  @@map("Doctor_Time")
+}
+
+model Queue {
+  id           Int @id @default(autoincrement())
+  userId       Int
+  doctorTimeId Int
+
+  user       User      @relation(fields: [userId], references: [id])
+  doctorTime Doctorime @relation(fields: [doctorTimeId], references: [id])
+}
+
+model Clinic {
+  id     Int    @id @default(autoincrement())
+  name   String @map("clinic_name") @db.VarChar(50)
+  detail String @db.VarChar(512)
+
+  Doctor Doctor[]
+}
+
+enum Cure {
+  OPD
+  ADMIT
+}
+
+enum Payment {
+  TREATMENT
+  PAYMENT
+  COMPLETED
+}
+
+model MedicalHistory {
+  id         Int @id @default(autoincrement())
+  userId     Int
+  doctorId   Int
+  medicineId Int
+
+  visitorNumber   String   @map("visitor_Number") @db.VarChar(20)
+  weight          Decimal? @default(0)
+  height          Decimal? @default(0)
+  heartRate       Decimal? @default(0) @map("heart_rate")
+  bloodPressure   Decimal? @default(0) @map("blood_pressure")
+  medicine        String?  @db.VarChar(256)
+  initialSymptoms String?  @map("initial_Symptoms") @db.VarChar(256)
+  drugAllergies   String?  @map("drug_Allergies") @db.VarChar(128)
+  treatmentResult String?  @map("treatment_Result") @db.VarChar(1024)
+  conclusion      String?  @db.VarChar(256)
+  totalPrice      Decimal? @default(0)
+  createdAt       DateTime @default(now()) @db.Timestamp(0)
+  summary         String   @db.VarChar(256)
+  cureStatus      Cure     @map("cure_status")
+  paymentStatus   Payment  @map("payment_status")
+
+  user      User     @relation(fields: [userId], references: [id])
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  medicines Medicine @relation(fields: [medicineId], references: [id])
+
+  TreatmentDetail     TreatmentDetail[]
+  MedicineCertificate MedicineCertificate[]
+
+  @@map("Medical_History")
+}
+
+model TreatmentDetail {
+  id        Int    @id @default(autoincrement())
+  historyId Int
+  treatment String @db.VarChar(128)
+
+  history MedicalHistory @relation(fields: [historyId], references: [id])
+
+  @@map("Treatment_Detail")
+}
+
+model Medicine {
+  id            Int @id @default(autoincrement())
+  medicalNameId Int @map("medical_name_id")
+  quantity      Int
+
+  medicalName MedicineName @relation(fields: [medicalNameId], references: [id])
+
+  MedicalHistory MedicalHistory[]
+}
+
+model MedicineName {
+  id     Int    @id @default(autoincrement())
+  name   String @map("medical_name")
+  detail String @map("medical_detail")
+
+  Medicine Medicine[]
+
+  @@map("Medical_Name")
+}
+
+model MedicineCertificate {
+  id        Int      @id @default(autoincrement())
+  historyId Int
+  doctorId  Int
+  userId    Int
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  pdf       String   @db.VarChar(128)
+
+  history MedicalHistory @relation(fields: [historyId], references: [id])
+  doctor  Doctor         @relation(fields: [doctorId], references: [id])
+  user    User           @relation(fields: [userId], references: [id])
+
+  @@map("Medical_Certificate")
 }
