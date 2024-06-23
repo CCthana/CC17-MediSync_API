@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,147 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  hn            String    @unique @db.VarChar(20)
+  password      String    @map("user_password") @db.VarChar(50)
+  firstName     String    @map("user_firstName") @db.VarChar(30)
+  lastName      String    @map("User_lastName") @db.VarChar(30)
+  phone         String?   @unique @map("user_phone") @db.VarChar(20)
+  email         String?   @unique @map("user_email") @db.VarChar(50)
+  address       String?   @map("user_address") @db.VarChar(256)
+  birthDate     DateTime?
+  nationality   String?   @db.VarChar(30)
+  gender        Gender    @map("user_gender")
+  createdAt     DateTime  @default(now()) @db.Timestamp(0)
+  drugAllergies String?   @map("drug_allergies") @db.VarChar(128)
+
+  visitorNumbers      VisitorNumber[]
+  medicalCertificates MedicalCertificate[]
+  appointments        Appointment[]
+}
+
+model Clinic {
+  id        Int      @id @default(autoincrement())
+  name      String   @map("Clinic_name") @db.VarChar(50)
+  detail    String?  @map("Clinic_detail") @db.VarChar(512)
+  image     String?  @map("Clinic_iamge") @db.VarChar(256)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime? @updatedAt @db.Timestamp(0)
+
+  doctors        Doctor[]
+  visitorNumbers VisitorNumber[]
+}
+
+model Doctor {
+  id        Int       @id @default(autoincrement())
+  clinicId  Int
+  firstName String    @map("Doctor_firstName") @db.VarChar(50)
+  lastName  String    @map("Doctor_lastName") @db.VarChar(50)
+  birthDate DateTime?
+  education String?   @db.VarChar(50)
+  image     String?   @db.VarChar(256)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime?  @updatedAt @db.Timestamp(0)
+  isDeleted Boolean   @default(false)
+
+  clinic Clinic @relation(fields: [clinicId], references: [id])
+
+  visitorNumbers      VisitorNumber[]
+  medicalCertificates MedicalCertificate[]
+  appointments        Appointment[]
+}
+
+enum VnType {
+  OPD
+  ADMIT
+}
+
+enum VnStatus {
+  QUEUE
+  TREATMENT
+  PAYMENT
+  COMPPELETED
+}
+
+model VisitorNumber {
+  id              Int      @id @default(autoincrement())
+  hn              String
+  clinicId        Int
+  doctorId        Int?
+  vn              String   @unique @db.VarChar(20)
+  weight          Decimal?
+  height          Decimal?
+  heartRate       Decimal?
+  bloodPreasure   String?  @db.VarChar(20)
+  temperature     Decimal?
+  symptoms        String?  @db.VarChar(256)
+  treatmentResult String?  @db.VarChar(1024)
+  diagnosis       String?  @db.VarChar(256)
+  medicine        String?  @db.VarChar(256)
+  totalPrice      Decimal? @default(0)
+  vnType          VnType?
+  createdAt       DateTime @default(now()) @db.Timestamp(0)
+  summary         String?  @db.VarChar(256)
+  recipt          String?  @db.VarChar(256)
+  status          VnStatus @default(QUEUE)
+
+  user   User   @relation(fields: [hn], references: [hn])
+  clinic Clinic @relation(fields: [clinicId], references: [id])
+  doctor Doctor? @relation(fields: [doctorId], references: [id])
+
+  medicalCertificates MedicalCertificate[]
+}
+
+model MedicalCertificate {
+  id          Int      @id @default(autoincrement())
+  vn          String
+  hn          String
+  doctorId    Int
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  certificate String?  @db.VarChar(256)
+
+  user          User          @relation(fields: [hn], references: [hn])
+  visitorNumber VisitorNumber @relation(fields: [vn], references: [vn])
+  doctor        Doctor        @relation(fields: [doctorId], references: [id])
+}
+
+enum appointmentStatus {
+  PENDING
+  COMPPELETED
+  CANCELED
+}
+
+model Appointment {
+  id              Int               @id @default(autoincrement())
+  hn              String
+  doctorId        Int
+  createdAt       DateTime          @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime
+  status          appointmentStatus
+  user            User              @relation(fields: [hn], references: [hn])
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
+}
+
+enum adminRole {
+  RECEPTION
+  NURSE
+  DOCTOR
+  ACCOUNT
+  ADMIN
+}
+
+model Admin {
+  id       Int       @id @default(autoincrement())
+  userName String    @db.VarChar(50)
+  password String    @db.VarChar(128)
+  role     adminRole
 }
