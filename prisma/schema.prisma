@@ -47,7 +47,7 @@ model Clinic {
 
 model Doctor {
   id        Int       @id @default(autoincrement())
-  clinicId  Int
+  clinicId  Int?
   firstName String    @map("Doctor_firstName") @db.VarChar(50)
   lastName  String    @map("Doctor_lastName") @db.VarChar(50)
   birthDate DateTime?
@@ -57,7 +57,7 @@ model Doctor {
   updatedAt DateTime?  @updatedAt @db.Timestamp(0)
   isDeleted Boolean   @default(false)
 
-  clinic Clinic @relation(fields: [clinicId], references: [id])
+  clinic Clinic? @relation(fields: [clinicId], references: [id])
 
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
@@ -79,8 +79,8 @@ enum VnStatus {
 model VisitorNumber {
   id              Int      @id @default(autoincrement())
   hn              String
-  clinicId        Int
-  doctorId        Int
+  clinicId        Int?
+  doctorId        Int?
   vn              String   @unique @db.VarChar(20)
   weight          Decimal?
   height          Decimal?
@@ -92,15 +92,15 @@ model VisitorNumber {
   diagnosis       String?  @db.VarChar(256)
   medicine        String?  @db.VarChar(256)
   totalPrice      Decimal? @default(0)
-  vnType          VnType
+  vnType          VnType?
   createdAt       DateTime @default(now()) @db.Timestamp(0)
   summary         String?  @db.VarChar(256)
   recipt          String?  @db.VarChar(256)
   status          VnStatus @default(QUEUE)
 
   user   User   @relation(fields: [hn], references: [hn])
-  clinic Clinic @relation(fields: [clinicId], references: [id])
-  doctor Doctor @relation(fields: [doctorId], references: [id])
+  clinic Clinic? @relation(fields: [clinicId], references: [id])
+  doctor Doctor? @relation(fields: [doctorId], references: [id])
 
   medicalCertificates MedicalCertificate[]
 }
@@ -127,12 +127,12 @@ enum appointmentStatus {
 model Appointment {
   id              Int               @id @default(autoincrement())
   hn              String
-  doctorId        Int
+  doctorId        Int?
   createdAt       DateTime          @default(now()) @db.Timestamp(0)
   appointmentTime DateTime
   status          appointmentStatus
   user            User              @relation(fields: [hn], references: [hn])
-  doctor          Doctor            @relation(fields: [doctorId], references: [id])
+  doctor          Doctor?            @relation(fields: [doctorId], references: [id])
 }
 
 enum adminRole {
