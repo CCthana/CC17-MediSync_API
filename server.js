@@ -21,7 +21,7 @@ app.use(morgan('dev'));
 app.use(limiter);
 app.use(express.json());
 
-app.use('/admin',adminRouter)
+
 app.use('/user', userRouter)
 
 
