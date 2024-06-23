@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const notFoundMiddlwware = require('./src/middlewares/not-found');
 const errorMiddleware = require('./src/middlewares/error');
 const limiter = require('./src/middlewares/rate-limit');
+
 const adminRouter = require('./src/routes/admin-route');
 const clinicRouter = require('./src/routes/clinic-route');
 const doctorRouter = require('./src/routes/doctor-route');
@@ -14,6 +15,10 @@ const vnRouter = require('./src/routes/vn-route');
 const nurseRouter = require('./src/routes/nurse-route');
 const adminDoctorRouter = require('./src/routes/adminDoctor-route');
 const accountRouter = require('./src/routes/account-route');
+
+
+const userRouter = require('./src/routes/user-route');
+
 
 const app = express();
 app.use(express.json());
@@ -35,6 +40,8 @@ app.use('/vn', vnRouter)
 // path public
 app.use('/clinic', clinicRouter)
 app.use('/doctor', doctorRouter)
+
+app.use('/user', userRouter)
 
 app.use(notFoundMiddlwware);
 app.use(errorMiddleware);
