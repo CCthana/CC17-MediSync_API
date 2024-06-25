@@ -27,6 +27,8 @@ model User {
   gender        Gender    @map("user_gender")
   createdAt     DateTime  @default(now()) @db.Timestamp(0)
   drugAllergies String?   @map("drug_allergies") @db.VarChar(128)
+  otp String?
+  otpExpires DateTime?
 
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
