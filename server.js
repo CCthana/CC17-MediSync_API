@@ -18,6 +18,7 @@ const accountRouter = require('./src/routes/account-route');
 
 
 const userRouter = require('./src/routes/user-route');
+const authRouter = require('./src/routes/auth-route');
 
 
 const app = express();
@@ -36,7 +37,7 @@ app.use('/doctor', adminDoctorRouter)
 app.use('/account', accountRouter)
 app.use('/hn', hnRouter)
 app.use('/vn', vnRouter)
-
+app.use('/auth',authRouter)
 // path public
 app.use('/clinic', clinicRouter)
 app.use('/doctor', doctorRouter)

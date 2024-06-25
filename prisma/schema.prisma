@@ -16,7 +16,7 @@ enum Gender {
 model User {
   id            Int       @id @default(autoincrement())
   hn            String    @unique @db.VarChar(20)
-  password      String    @map("user_password") @db.VarChar(50)
+  password      String    @map("user_password") @db.VarChar(60)
   firstName     String    @map("user_firstName") @db.VarChar(30)
   lastName      String    @map("User_lastName") @db.VarChar(30)
   phone         String?   @unique @map("user_phone") @db.VarChar(20)
