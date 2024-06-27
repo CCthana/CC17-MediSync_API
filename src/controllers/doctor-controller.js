@@ -77,4 +77,13 @@ doctorController.getAllDoctor = async ( req, res, next ) => {
     }
 }
 
+doctorController.getAllDoctorActive = async ( req, res, next ) => {
+    try {
+        const reault = await doctorService.findAllDoctorActive()
+        res.status(200).json(reault)
+    } catch (err) {
+        next(err)
+    }
+}
+
 module.exports = doctorController

@@ -32,7 +32,7 @@ app.use(express.json());
 app.use('/admin', adminRouter)
 app.use('/reception', receptionRouter)
 app.use('/nurse', nurseRouter)
-app.use('/doctor', adminDoctorRouter)
+app.use('/adminDoctor', adminDoctorRouter)
 app.use('/account', accountRouter)
 app.use('/hn', hnRouter)
 app.use('/vn', vnRouter)
