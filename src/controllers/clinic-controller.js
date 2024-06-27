@@ -18,7 +18,7 @@ clinicController.createClinic = async ( req, res, next ) => {
             })
         }
 
-        await adminService.createClinic(data)
+        await clinicService.createClinic(data)
         res.status(201).json({ message: 'clinic created'})
 
     } catch (err) {
@@ -44,6 +44,7 @@ clinicController.updateClinic = async ( req, res, next ) => {
 clinicController.getAllClinic = async ( req, res, next ) => {
     try {
         const reault = await clinicService.findAllClinic()
+        console.log('reault', reault)
         res.status(200).json({clinic: reault})
     } catch (err) {
         next(err)
