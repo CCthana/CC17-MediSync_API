@@ -66,6 +66,7 @@ model Doctor {
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
   appointments        Appointment[]
+  admin               Admin[]
 }
 
 enum VnType {
@@ -147,20 +148,25 @@ enum adminRole {
   DOCTOR
   ACCOUNT
   ADMIN
-}
+}  
 
 model Admin {
-  id       Int       @id @default(autoincrement())
-  userName String    @db.VarChar(50)
-  password String    @db.VarChar(128)
-  role     adminRole
+  id        Int       @id @default(autoincrement())
+  userName  String    @db.VarChar(50)
+  password  String    @db.VarChar(128)
+  role      adminRole
+  firstName String?   @db.VarChar(50)
+  lastName  String?   @db.VarChar(50)
+  doctorId  Int?
+
+  doctor Doctor? @relation(fields: [doctorId], references: [id])
 }
 
 model Package {
   id        Int       @id @default(autoincrement())
   name      String    @map("package_name") @db.VarChar(256)
-  image     String?    @map("package_image") @db.VarChar(512)
-  detail    String?    @map("package_detail") @db.VarChar(1024)
+  image     String?   @map("package_image") @db.VarChar(512)
+  detail    String?   @map("package_detail") @db.VarChar(1024)
   promotion DateTime? @map("package_promotion") @db.Date()
   price     Int?      @map("package_price")
 }
@@ -168,5 +174,5 @@ model Package {
 model Career {
   id       Int    @id @default(autoincrement())
   name     String @map("career_name") @db.VarChar(256)
-  quantity Int?    @map("career_quantity")
+  quantity Int?   @map("career_quantity")
 }
