@@ -1,3 +1,4 @@
+const hashService = require("../services/hash-service")
 const hnService = require("../services/hn-service")
 const createError = require("../utility/create-error")
 
@@ -5,25 +6,28 @@ const hnController = {}
 
 hnController.createHN = async ( req, res, next ) => {
     try {
-
+        
         const data = req.body
+        console.log(data)
         data.password = '123456'
-        data.hn = "HN" + Math.round(Math.random()* 100000000) + ""
-        console.log('data', data)
+        data.hn = "HN" + Math.round(Math.random()* 1000000) + ""
+        data.birthDate = new Date(data.birthDate)
 
         const existHN = await hnService.findHnByNameOrPhoneOrEmail(data)
-        console.log('existHN', existHN)
+        
 
-        if (existHN.length >= 0) {
+        if (existHN.length > 0) {
             createError({
                 message: 'HN already in use',
                 statusCode: 400
             })
         }
 
-        delete data.password
+        const hashPassword = await hashService.hash(data.password)
+        data.password = hashPassword;
 
         await hnService.createHn(data)
+     
         res.status(201).json({ message: 'HN created'})
 
     } catch (err) {
@@ -93,5 +97,33 @@ hnController.getHnByHn = async ( req, res, next ) => {
         next(err)
     }
 }
+
+hnController.getHnByName = async ( req, res, next ) => {
+    try {
+        const name = req.params.name
+        console.log('req.params',req.params.name)
+        const result = await hnService.findHnByName(name)
+        console.log('result',result)
+
+        res.status(200).json( result )
+
+    } catch (err) {
+        next(err)
+    }
+}
+
+hnController.getHnByPhone = async ( req, res, next ) => {
+    try {
+        const phone = req.params.phone
+        const result = await hnService.findHnByPhone(phone)
+
+       
+        res.status(200).json( result )
+
+    } catch (err) {
+        next(err)
+    }
+}
+
 
 module.exports = hnController

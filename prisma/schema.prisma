@@ -22,7 +22,7 @@ model User {
   phone         String?   @unique @map("user_phone") @db.VarChar(20)
   email         String?   @unique @map("user_email") @db.VarChar(50)
   address       String?   @map("user_address") @db.VarChar(256)
-  birthDate     DateTime?
+  birthDate     DateTime? @db.Date
   nationality   String?   @db.VarChar(30)
   gender        Gender    @map("user_gender")
   createdAt     DateTime  @default(now()) @db.Timestamp(0)
@@ -66,6 +66,7 @@ model Doctor {
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
   appointments        Appointment[]
+  admin               Admin[]
 }
 
 enum VnType {
@@ -125,7 +126,7 @@ model MedicalCertificate {
 
 enum appointmentStatus {
   PENDING
-  COMPPELETED
+  COMPELETED
   CANCELED
 }
 
@@ -134,8 +135,8 @@ model Appointment {
   hn       String
   doctorId Int?
 
-  createdAt       DateTime          @default(now()) @db.Timestamp(0)
-  appointmentTime DateTime
+  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime?         @db.Date
   status          appointmentStatus
   user            User              @relation(fields: [hn], references: [hn])
   doctor          Doctor?           @relation(fields: [doctorId], references: [id])
@@ -150,17 +151,22 @@ enum adminRole {
 }
 
 model Admin {
-  id       Int       @id @default(autoincrement())
-  userName String    @db.VarChar(50)
-  password String    @db.VarChar(128)
-  role     adminRole
+  id        Int       @id @default(autoincrement())
+  userName  String    @db.VarChar(50)
+  password  String    @db.VarChar(128)
+  role      adminRole
+  firstName String?   @db.VarChar(50)
+  lastName  String?   @db.VarChar(50)
+  doctorId  Int?
+
+  doctor Doctor? @relation(fields: [doctorId], references: [id])
 }
 
 model Package {
   id        Int       @id @default(autoincrement())
   name      String    @map("package_name") @db.VarChar(256)
-  image     String?    @map("package_image") @db.VarChar(512)
-  detail    String?    @map("package_detail") @db.VarChar(1024)
+  image     String?   @map("package_image") @db.VarChar(512)
+  detail    String?   @map("package_detail") @db.VarChar(1024)
   promotion DateTime? @map("package_promotion") @db.Date()
   price     Int?      @map("package_price")
 }
@@ -168,5 +174,5 @@ model Package {
 model Career {
   id       Int    @id @default(autoincrement())
   name     String @map("career_name") @db.VarChar(256)
-  quantity Int?    @map("career_quantity")
+  quantity Int?   @map("career_quantity")
 }
