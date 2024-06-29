@@ -22,7 +22,7 @@ model User {
   phone         String?   @unique @map("user_phone") @db.VarChar(20)
   email         String?   @unique @map("user_email") @db.VarChar(50)
   address       String?   @map("user_address") @db.VarChar(256)
-  birthDate     DateTime?
+  birthDate     DateTime? @db.Date
   nationality   String?   @db.VarChar(30)
   gender        Gender    @map("user_gender")
   createdAt     DateTime  @default(now()) @db.Timestamp(0)
@@ -126,7 +126,7 @@ model MedicalCertificate {
 
 enum appointmentStatus {
   PENDING
-  COMPPELETED
+  COMPELETED
   CANCELED
 }
 
@@ -135,8 +135,8 @@ model Appointment {
   hn       String
   doctorId Int?
 
-  createdAt       DateTime          @default(now()) @db.Timestamp(0)
-  appointmentTime DateTime
+  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime?         @db.Date
   status          appointmentStatus
   user            User              @relation(fields: [hn], references: [hn])
   doctor          Doctor?           @relation(fields: [doctorId], references: [id])
@@ -148,7 +148,7 @@ enum adminRole {
   DOCTOR
   ACCOUNT
   ADMIN
-}  
+}
 
 model Admin {
   id        Int       @id @default(autoincrement())

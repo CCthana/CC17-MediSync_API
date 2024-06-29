@@ -18,6 +18,7 @@ const accountRouter = require('./src/routes/account-route');
 
 
 const userRouter = require('./src/routes/user-route');
+const authenticateAdmin = require('./src/middlewares/authenticateAdmin');
 
 
 const app = express();
@@ -30,12 +31,12 @@ app.use(express.json());
 
 // path admin potect
 app.use('/admin', adminRouter)
-app.use('/reception', receptionRouter)
-app.use('/nurse', nurseRouter)
-app.use('/adminDoctor', adminDoctorRouter)
-app.use('/account', accountRouter)
-app.use('/hn', hnRouter)
-app.use('/vn', vnRouter)
+app.use('/reception',authenticateAdmin ,receptionRouter)
+app.use('/nurse', authenticateAdmin, nurseRouter)
+app.use('/adminDoctor', authenticateAdmin, adminDoctorRouter)
+app.use('/account', authenticateAdmin, accountRouter)
+app.use('/hn', authenticateAdmin, hnRouter)
+app.use('/vn', authenticateAdmin, vnRouter)
 
 // path public
 app.use('/clinic', clinicRouter)
