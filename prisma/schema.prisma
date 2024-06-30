@@ -90,7 +90,7 @@ model VisitorNumber {
   weight          Decimal? @db.Decimal(10, 3)
   height          Decimal? @db.Decimal(10, 3)
   heartRate       Decimal? @db.Decimal(10, 3)
-  bloodPreasure   String?  @db.VarChar(20)
+  bloodPressure   String?  @db.VarChar(20)
   temperature     Decimal? @db.Decimal(10, 3)
   symptoms        String?  @db.VarChar(256)
   treatmentResult String?  @db.VarChar(1024)
