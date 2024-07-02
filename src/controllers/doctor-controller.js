@@ -86,4 +86,34 @@ doctorController.getAllDoctorActive = async ( req, res, next ) => {
     }
 }
 
+
+doctorController.getAllDoctorByClinic = async (req, res, next) => {
+    try {
+
+        const clinicId = +req.params.clinicId
+        console.log("+++++++++++++++++",clinicId)
+        const result = await doctorService.getAllDoctorByClinic(clinicId)
+        res.status(200).json(result);
+        
+    } catch (err) {
+        next(err)
+    }
+}
+
+doctorController.getAdminDoctorData = async (req, res, next) => {
+    try {
+        const id = +req.params.doctorId
+
+        console.log(id)
+
+        const result = await doctorService.getAdminDoctorData(id)
+
+        res.status(200).json(result)
+        
+    } catch (err) {
+        next(err)
+    }
+}
+
+
 module.exports = doctorController

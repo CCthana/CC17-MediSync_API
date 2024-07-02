@@ -53,7 +53,9 @@ adminController.loginAdmin = async ( req, res, next) => {
             })
         }
 
-        const accessTokenAdmin = jwtService.sign({ id: existAdmin.id})
+        const accessTokenAdmin = jwtService.sign({ id: existAdmin.id,
+            doctorId: existAdmin.doctorId
+        })
         // console.log('accessTokenAdmin loginAdmin', accessTokenAdmin)
 
         res.status(200).json({ accessTokenAdmin })

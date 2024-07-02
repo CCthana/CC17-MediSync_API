@@ -22,5 +22,10 @@ userService.getAppointmentByHn = (userHn) => prisma.appointment.findMany({
       }
 })
 
+userService.findUserByEmail = (email) => prisma.user.findFirst({
+   where: {
+      email: email
+   }
+})
 
 module.exports = userService;

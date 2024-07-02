@@ -5,13 +5,17 @@ const accountController = {}
 
 accountController.updateTotalPriceVnByVn = async ( req, res, next ) => {
     try {
+        const id = +req.body.id
         const data = req.body
+        delete data.id
 
         if (data.status !== "COMPPELETED") {
             data.status = "COMPPELETED"
         }
+        console.log("++++ data +++++",data)
+        console.log("++++ id +++++",id)
         
-        const result = await vnService.updateVnByVn(data)
+        const result = await vnService.updateVnByVn(id, data)
         console.log('result updateTotalPriceVnByVn', result)
 
         

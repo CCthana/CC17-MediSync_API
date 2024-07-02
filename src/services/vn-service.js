@@ -5,9 +5,9 @@ vnService.createVn = (data) => {
     return prisma.visitorNumber.create({data});
 }
 
-vnService.updateVnByVn = (data) => {
+vnService.updateVnByVn = (id, data) => {
     return prisma.visitorNumber.update({
-        where:{vn: data.vn},
+        where:{id: id},
         data
     });
 }
@@ -16,27 +16,44 @@ vnService.getAllVnByClinic = (clinicId) => {
     return prisma.visitorNumber.findMany({
         where:{
             AND: [
-                    {clinicId},
+                    {clinicId: clinicId},
                     {status: "QUEUE"}
             ]
-        },
-        include: {
-            user: true
+        },include: {
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    gender: true,
+                    birthDate: true,
+                    nationality: true,
+                    
+                }
+            }
         }
     });
 }
 
-vnService.getAllVnByClinicAndStatusTreatmentAndDoctor = (data) => {
+vnService.getTreatmentVnByDocTor = (id) => {
     return prisma.visitorNumber.findMany({
         where:{
             AND: [
-                {clinicId: data.clinicId},
                 {status: "TREATMENT"},
-                {doctorId: data.doctorId}
+                {doctorId: id}
             ]
         },
         include: {
-            user: true
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    birthDate: true,
+                    gender: true
+
+                }
+            },
+            doctor: true,
+            clinic: true,
         }
     });
 }
@@ -45,7 +62,22 @@ vnService.getAllVnByStatusPayment = () => {
     return prisma.visitorNumber.findMany({
         where:{ status: "PAYMENT" },
         include: {
-            user: true
+            user: {
+                select:{
+                    hn: true,
+                    firstName: true,
+                    lastName: true,
+                    gender: true,
+                    birthDate: true,
+                    phone: true,
+                    email: true,
+                    address: true,
+                    nationality: true,
+                    appointments: {
+                        where: {status: "PENDING"}
+                    }
+                },
+            }
         }
     });
 }
@@ -59,5 +91,14 @@ vnService.getVnByVn = (vn) => {
         where:{vn}
     });
 }
+
+vnService.getVnByHn = (hn) => {
+    return prisma.visitorNumber.findMany({
+        where:{hn}
+    });
+}
+
+
+
 
 module.exports = vnService

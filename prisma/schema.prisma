@@ -38,7 +38,7 @@ model User {
 model Clinic {
   id        Int       @id @default(autoincrement())
   name      String    @map("Clinic_name") @db.VarChar(50)
-  detail    String?   @map("Clinic_detail") @db.VarChar(512)
+  detail    String?   @map("Clinic_detail") @db.VarChar(2048)
   image     String?   @map("Clinic_image") @db.VarChar(256)
   createdAt DateTime  @default(now()) @db.Timestamp(0)
   updatedAt DateTime? @updatedAt @db.Timestamp(0)
@@ -90,7 +90,7 @@ model VisitorNumber {
   weight          Decimal? @db.Decimal(10, 3)
   height          Decimal? @db.Decimal(10, 3)
   heartRate       Decimal? @db.Decimal(10, 3)
-  bloodPreasure   String?  @db.VarChar(20)
+  bloodPressure   String?  @db.VarChar(20)
   temperature     Decimal? @db.Decimal(10, 3)
   symptoms        String?  @db.VarChar(256)
   treatmentResult String?  @db.VarChar(1024)
