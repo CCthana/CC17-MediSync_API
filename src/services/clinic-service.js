@@ -2,7 +2,14 @@ const prisma = require('../models/prisma')
 const clinicService = {}
 
 clinicService.findAllClinic = () => {
-    return prisma.clinic.findMany();
+    return prisma.clinic.findMany({
+        select: {
+            id: true,
+            name: true,
+            detail: true,
+            image: true
+        }
+    });
 }
 
 clinicService.findClinicByname = (name) => {

@@ -34,6 +34,48 @@ hnService.findHnByNameOrPhoneOrEmail = (data) => {
     });
 }
 
+hnService.findHnByName = (name) => {
+    return prisma.user.findMany({
+        where: {
+            OR: [
+                { firstName: { contains: name } },
+                { lastName: { contains: name } }
+            ]
+        },
+        select : {
+            hn: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            email: true,
+            address: true,
+            gender: true,
+            nationality: true,
+            birthDate: true
+        }
+    })
+}
+
+hnService.findHnByPhone = (phone) => {
+    return prisma.user.findMany({
+        where: {
+          phone: { contains: phone }  
+        },
+        select : {
+            hn: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            email: true,
+            address: true,
+            gender: true,
+            nationality: true,
+            birthDate: true
+        }
+
+    })
+}
+
 hnService.createHn = (data) => {
     return prisma.user.create({ data })
 }

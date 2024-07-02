@@ -20,6 +20,19 @@ doctorService.findAllDoctor = () => {
     return prisma.doctor.findMany();
 }
 
+doctorService.findAllDoctorActive = () => {
+    return prisma.doctor.findMany({
+        where: {isDeleted: false},
+        select: {
+            id: true,
+            clinicId: true,
+            firstName: true,
+            lastName: true,
+            image: true,
+        }
+    });
+}
+
 doctorService.createDoctor = ( data ) => {
     return prisma.doctor.create({ data })
 }

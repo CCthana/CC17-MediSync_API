@@ -16,19 +16,19 @@ enum Gender {
 model User {
   id            Int       @id @default(autoincrement())
   hn            String    @unique @db.VarChar(20)
-  password      String    @map("user_password") @db.VarChar(60)
+  password      String    @map("user_password") @db.VarChar(128)
   firstName     String    @map("user_firstName") @db.VarChar(30)
   lastName      String    @map("User_lastName") @db.VarChar(30)
   phone         String?   @unique @map("user_phone") @db.VarChar(20)
   email         String?   @unique @map("user_email") @db.VarChar(50)
   address       String?   @map("user_address") @db.VarChar(256)
-  birthDate     DateTime?
+  birthDate     DateTime? @db.Date
   nationality   String?   @db.VarChar(30)
   gender        Gender    @map("user_gender")
   createdAt     DateTime  @default(now()) @db.Timestamp(0)
   drugAllergies String?   @map("drug_allergies") @db.VarChar(128)
-  otp String?
-  otpExpires DateTime?
+  otp           String?
+  otpExpires    DateTime?
 
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
@@ -36,12 +36,14 @@ model User {
 }
 
 model Clinic {
-  id        Int      @id @default(autoincrement())
-  name      String   @map("Clinic_name") @db.VarChar(50)
-  detail    String?  @map("Clinic_detail") @db.VarChar(512)
-  image     String?  @map("Clinic_iamge") @db.VarChar(256)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
+  id        Int       @id @default(autoincrement())
+  name      String    @map("Clinic_name") @db.VarChar(50)
+  detail    String?   @map("Clinic_detail") @db.VarChar(512)
+  image     String?   @map("Clinic_image") @db.VarChar(256)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
   updatedAt DateTime? @updatedAt @db.Timestamp(0)
+  icon      String?   @map("Clinic_icon") @db.VarChar(256)
+  location  String?   @map("location") @db.VarChar(128)
 
   doctors        Doctor[]
   visitorNumbers VisitorNumber[]
@@ -56,7 +58,7 @@ model Doctor {
   education String?   @db.VarChar(50)
   image     String?   @db.VarChar(256)
   createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime?  @updatedAt @db.Timestamp(0)
+  updatedAt DateTime? @updatedAt @db.Timestamp(0)
   isDeleted Boolean   @default(false)
 
   clinic Clinic? @relation(fields: [clinicId], references: [id])
@@ -64,6 +66,7 @@ model Doctor {
   visitorNumbers      VisitorNumber[]
   medicalCertificates MedicalCertificate[]
   appointments        Appointment[]
+  admin               Admin[]
 }
 
 enum VnType {
@@ -87,7 +90,7 @@ model VisitorNumber {
   weight          Decimal? @db.Decimal(10, 3)
   height          Decimal? @db.Decimal(10, 3)
   heartRate       Decimal? @db.Decimal(10, 3)
-  bloodPreasure   String?  @db.VarChar(20)
+  bloodPressure   String?  @db.VarChar(20)
   temperature     Decimal? @db.Decimal(10, 3)
   symptoms        String?  @db.VarChar(256)
   treatmentResult String?  @db.VarChar(1024)
@@ -95,13 +98,13 @@ model VisitorNumber {
   medicine        String?  @db.VarChar(256)
   totalPrice      Decimal? @default(0) @db.Decimal(10, 3)
 
-  vnType          VnType?
-  createdAt       DateTime @default(now()) @db.Timestamp(0)
-  summary         String?  @db.VarChar(256)
-  recipt          String?  @db.VarChar(256)
-  status          VnStatus @default(QUEUE)
+  vnType    VnType?
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  summary   String?  @db.VarChar(256)
+  recipt    String?  @db.VarChar(256)
+  status    VnStatus @default(QUEUE)
 
-  user   User   @relation(fields: [hn], references: [hn])
+  user   User    @relation(fields: [hn], references: [hn])
   clinic Clinic? @relation(fields: [clinicId], references: [id])
   doctor Doctor? @relation(fields: [doctorId], references: [id])
 
@@ -123,20 +126,20 @@ model MedicalCertificate {
 
 enum appointmentStatus {
   PENDING
-  COMPPELETED
+  COMPELETED
   CANCELED
 }
 
 model Appointment {
-  id              Int               @id @default(autoincrement())
-  hn              String
-  doctorId        Int?
+  id       Int    @id @default(autoincrement())
+  hn       String
+  doctorId Int?
 
-  createdAt       DateTime          @default(now()) @db.Timestamp(0)
-  appointmentTime DateTime
+  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime?         @db.Date
   status          appointmentStatus
   user            User              @relation(fields: [hn], references: [hn])
-  doctor          Doctor?            @relation(fields: [doctorId], references: [id])
+  doctor          Doctor?           @relation(fields: [doctorId], references: [id])
 }
 
 enum adminRole {
@@ -148,8 +151,28 @@ enum adminRole {
 }
 
 model Admin {
-  id       Int       @id @default(autoincrement())
-  userName String    @db.VarChar(50)
-  password String    @db.VarChar(128)
-  role     adminRole
+  id        Int       @id @default(autoincrement())
+  userName  String    @db.VarChar(50)
+  password  String    @db.VarChar(128)
+  role      adminRole
+  firstName String?   @db.VarChar(50)
+  lastName  String?   @db.VarChar(50)
+  doctorId  Int?
+
+  doctor Doctor? @relation(fields: [doctorId], references: [id])
+}
+
+model Package {
+  id        Int       @id @default(autoincrement())
+  name      String    @map("package_name") @db.VarChar(256)
+  image     String?   @map("package_image") @db.VarChar(512)
+  detail    String?   @map("package_detail") @db.VarChar(1024)
+  promotion DateTime? @map("package_promotion") @db.Date()
+  price     Int?      @map("package_price")
+}
+
+model Career {
+  id       Int    @id @default(autoincrement())
+  name     String @map("career_name") @db.VarChar(256)
+  quantity Int?   @map("career_quantity")
 }
