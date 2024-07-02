@@ -26,9 +26,10 @@ hnController.createHN = async ( req, res, next ) => {
         const hashPassword = await hashService.hash(data.password)
         data.password = hashPassword;
 
-        await hnService.createHn(data)
+        const result = await hnService.createHn(data)
+        delete result.password
      
-        res.status(201).json({ message: 'HN created'})
+        res.status(201).json(result)
 
     } catch (err) {
         next(err)
