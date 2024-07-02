@@ -42,7 +42,7 @@ otpService.createAndSendOTP = async (email) => {
       subject: "Your OTP Code",
       html: `<p>Your OTP code is: <strong>${otp}</strong></p><p>This OTP is valid for 5 minutes.</p>`,
     };
-    console.log(otp);
+    console.log("++++++++  OTP ++++++++++++", otp);
     await transporter.sendMail(mailOptions);
     return { email, otp, otpExpires };
   } catch (error) {
