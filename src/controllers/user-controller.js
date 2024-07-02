@@ -29,29 +29,6 @@ userController.getAppointmentByHn = async (req, res, next) => {
    }
 }
 
-userController.login = async (req, res, next) => {
-   try {
-      
-      const existUser = await userService.findUserByEmail(req.body.email);
-
-      if(!existUser) {
-         createError({ message: 'invalid email', statusCode: 400 });
-      }
-
-      const isMatch = await hashService.compare(req.body.password, existUser.password);
-
-      if(!isMatch){
-         createError({message: 'invalid password', statusCode: 400});
-      }
-
-      const accessToken = jwtService.sign({ id: existUser.id });
-
-      res.status(200).json({accessToken});
-
-   } catch (err) {
-      next(err)
-   }
-}
 
 
 
