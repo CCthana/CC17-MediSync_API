@@ -1,27 +1,42 @@
-const prisma = require('../models/prisma');
+const prisma = require("../models/prisma");
 
 const userService = {};
 
+userService.getUserId = (userId) =>
+  prisma.user.findMany({
+    where: { id: userId },
+    include: {
+      visitorNumbers: true,
+    },
+  });
 
-userService.getUserId = (userId) => prisma.user.findMany({
-   where: {id: userId}, 
-   include: {
-      visitorNumbers: true
-      }
-});
+userService.findUserByEmail = (email) => {
+  return prisma.user.findUnique({
+    where: { email },
+  });
+};
 
-userService.getAppointmentByHn = (userHn) => prisma.appointment.findMany({
-   where: {hn: userHn},
-   include: {
+userService.createUser = (data) => {
+  return prisma.user.create({ data });
+};
+userService.findUserById = (userId) => {
+  return prisma.user.findFirst({
+    where: { id: userId },
+  });
+};
+
+userService.getAppointmentByHn = (userHn) =>
+  prisma.appointment.findMany({
+    where: { hn: userHn },
+    include: {
       doctor: {
-         include: {
-            clinic: true
-         }
+        include: {
+          clinic: true,
+        },
       },
-      
-      }
-})
-
+    },
+  });
+  
 userService.findUserByEmail = (email) => prisma.user.findFirst({
    where: {
       email: email
