@@ -9,7 +9,8 @@ otpService.generateOTP = () => {
 };
 
 otpService.generateReferenceCode = () => {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let refCode = "";
   for (let i = 0; i < 6; i++) {
     refCode += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -41,12 +42,12 @@ otpService.createAndSendOTP = async (email) => {
       subject: "Your OTP Code",
       html: `<p>Your OTP code is: <strong>${otp}</strong></p><p>This OTP is valid for 5 minutes.</p>`,
     };
-
+    console.log(otp);
     await transporter.sendMail(mailOptions);
     return { email, otp, otpExpires };
   } catch (error) {
     throw createError({
-      message: error.message || 'Failed to send OTP',
+      message: error.message || "Failed to send OTP",
       statusCode: 500,
     });
   }
