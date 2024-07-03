@@ -98,7 +98,6 @@ const prisma = new PrismaClient();
 //   },
 // ];
 
-
 // const clinicData = [
 //   {
 //     name: "ศูนย์รักษาโรคหลอดเลือดหัวใจตีบแบบซับซ้อน",
@@ -159,7 +158,8 @@ const doctorData = [
     lastName: "บุญพิทักษ์",
     birthDate: new Date("1981-02-12"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/0380a9422c5afcb91071754c083e9931"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/0380a9422c5afcb91071754c083e9931",
   },
   {
     clinicId: 2,
@@ -167,7 +167,8 @@ const doctorData = [
     lastName: "พรหมส่ง",
     birthDate: new Date("1892-03-05"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/d5b127bfe6d7c5b2b4dc9189e72f21f0"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/d5b127bfe6d7c5b2b4dc9189e72f21f0",
   },
   {
     clinicId: 3,
@@ -175,7 +176,8 @@ const doctorData = [
     lastName: "รัตนะแสง",
     birthDate: new Date("1931-06-07"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/fed465cee4ec8ce78409ade3732dfbe3"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/fed465cee4ec8ce78409ade3732dfbe3",
   },
   {
     clinicId: 4,
@@ -183,7 +185,8 @@ const doctorData = [
     lastName: "อายุวัฒ",
     birthDate: new Date("1926-07-06"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/d9ab2e87ab8770a19f0e8a2130fda3f7"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/d9ab2e87ab8770a19f0e8a2130fda3f7",
   },
   {
     clinicId: 5,
@@ -191,7 +194,8 @@ const doctorData = [
     lastName: "สมประสงค์",
     birthDate: new Date("1941-03-12"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/a8919562f87124b9d249b4392ec08dd7"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/a8919562f87124b9d249b4392ec08dd7",
   },
   {
     clinicId: 6,
@@ -199,7 +203,8 @@ const doctorData = [
     lastName: "ณกรุงเก่า",
     birthDate: new Date("1967-06-30"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/a4b42d6cf6c22ce6cada39c3d947d7f1"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/a4b42d6cf6c22ce6cada39c3d947d7f1",
   },
   {
     clinicId: 7,
@@ -207,7 +212,8 @@ const doctorData = [
     lastName: "ศรีบุญญา",
     birthDate: new Date("1897-07-20"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/73fae1c67b96091490d6739738e78b07"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/73fae1c67b96091490d6739738e78b07",
   },
   {
     clinicId: 8,
@@ -215,7 +221,8 @@ const doctorData = [
     lastName: "มหาธาตุ",
     birthDate: new Date("1899-05-04"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/1644cf94a7b5669efcf156df79c51b8d"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/1644cf94a7b5669efcf156df79c51b8d",
   },
   {
     clinicId: 9,
@@ -223,7 +230,8 @@ const doctorData = [
     lastName: "แสงพนา",
     birthDate: new Date("1987-06-05"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/21f1c0217eb7a1bb55dc579ad133e6d1"
+    image:
+      "https://asset.cloudinary.com/djncnn93v/21f1c0217eb7a1bb55dc579ad133e6d1",
   },
   {
     clinicId: 10,
@@ -231,8 +239,9 @@ const doctorData = [
     lastName: "หฤทัยกล้า",
     birthDate: new Date("1981-10-05"),
     education: "ศิริราช",
-    image: "https://asset.cloudinary.com/djncnn93v/efd34aac65abf282549d532a825e22f1"
-  }
+    image:
+      "https://asset.cloudinary.com/djncnn93v/efd34aac65abf282549d532a825e22f1",
+  },
 ];
 
 // const visitorNumberData = [
@@ -402,54 +411,46 @@ const doctorData = [
 //     }
 //   ];
 
-
-
-  const adminData = [
-    {
-      userName: "Acount",
-      password: "654321",
-      role: "ACCOUNT"
-    },
-    {
-      userName: "Doctor",
-      password: "654321",
-      role: "DOCTOR"
-    },
-    {
-      userName: "Nurse",
-      password: "654321",
-      role: "NURSE"
-    },
-    {
-      userName: "Reception",
-      password: "654321",
-      role: "RECEPTION"
-    },
-    {
-      userName: "Admin",
-      password: "654321",
-      role: "ADMIN"
-    }
-  ];
-
+const adminData = [
+  {
+    userName: "Acount",
+    password: "654321",
+    role: "ACCOUNT",
+  },
+  {
+    userName: "Doctor",
+    password: "654321",
+    role: "DOCTOR",
+  },
+  {
+    userName: "Nurse",
+    password: "654321",
+    role: "NURSE",
+  },
+  {
+    userName: "Reception",
+    password: "654321",
+    role: "RECEPTION",
+  },
+  {
+    userName: "Admin",
+    password: "654321",
+    role: "ADMIN",
+  },
+];
 
 const run = async () => {
   try {
     // await prisma.admin.createMany({data:adminData});
     // console.log("admins seeded sucessfull");
-
     // await prisma.appointment.createMany({data:appointmentData});
     // console.log("Appointments seeded successfull.");
-
     // await prisma.visitorNumber.createMany({data:visitorNumberData});
     // console.log("Visitors seeded successfully.");
-
     // await prisma.user.createMany({ data: UserData });
     // console.log("Users seeded successfully.");
-
     // await prisma.clinic.createMany({ data: clinicData });
     // console.log("Clinics seeded successfully.");
-
     // await prisma.doctor.createMany({ data: doctorData });
     // console.log("Doctors seeded successfully.");
   } catch (error) {
@@ -460,5 +461,3 @@ const run = async () => {
 };
 
 run();
-
-
