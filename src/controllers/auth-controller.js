@@ -83,7 +83,8 @@ authController.verifyOTP = async (req, res, next) => {
 };
 
 
-authController.getMe = (req, res, next) => {
+authController.getMe = async (req, res, next) => {
+ 
   res.status(200).json({ user: req.user });
 };
 module.exports = authController;
