@@ -112,7 +112,7 @@ vnController.getVnByHn = async ( req, res, next ) => {
         const hn = req.params.hn
         console.log(hn)
         const result = await vnService.getVnByHn(hn)
-        console.log('result getVnByVn', result)
+        console.log('result getVnByhn', result)
 
         res.status(200).json(result)
 
