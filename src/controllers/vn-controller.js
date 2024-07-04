@@ -8,7 +8,7 @@ vnController.createVn = async ( req, res, next ) => {
     try {
         const data = req.body
         data.vn = "VN" + Math.round(Math.random()* 1000000) + ""
-
+        data.clinicId = +data.clinicId   
         const exitsHN = await hnService.findHnByHn(data.hn)
         if (!exitsHN) {
             createError({
@@ -44,26 +44,24 @@ vnController.updateVnByVn = async ( req, res, next ) => {
 
 vnController.getAllVnByClinic = async ( req, res, next ) => {
     try {
-        const clinicId = req.body.clinicId
-        console.log('clinicId', clinicId)
+        const clinicId = +req.params.clinicId
         const result = await vnService.getAllVnByClinic(clinicId)
-        console.log('result getAllVnByClinic', result)
-
-        res.status(200).json({ getAllVnByClinic: result })
+        
+        res.status(200).json(result)
 
     } catch (err) {
         next(err)
     }
 }
 
-vnController.getAllVnByClinicAndStatusTreatmentAndDoctor = async ( req, res, next ) => {
+vnController.getTreatmentVnByDocTor = async ( req, res, next ) => {
     try {
-        const data = req.body
-        console.log('data getAllVnByClinicAndStatusTreatmentAndDoctor', data)
-        const result = await vnService.getAllVnByClinicAndStatusTreatmentAndDoctor(data)
-        console.log('result getAllVnByClinicAndStatusTreatmentAndDoctor', result)
-
-        res.status(200).json({ getAllVnByClinic: result })
+        const id = +req.params.doctorId
+       
+        const result = await vnService.getTreatmentVnByDocTor(id)
+      
+        
+        res.status(200).json( result )
 
     } catch (err) {
         next(err)
@@ -74,8 +72,9 @@ vnController.getAllVnByStatusPayment = async ( req, res, next ) => {
     try {
         const result = await vnService.getAllVnByStatusPayment()
         console.log('result getAllVnByStatusPayment', result)
+        
 
-        res.status(200).json({ getAllVnByStatusPayment: result })
+        res.status(200).json(result)
 
     } catch (err) {
         next(err)
@@ -102,6 +101,20 @@ vnController.getVnByVn = async ( req, res, next ) => {
         console.log('result getVnByVn', result)
 
         res.status(200).json({ getVnByVn: result })
+
+    } catch (err) {
+        next(err)
+    }
+}
+
+vnController.getVnByHn = async ( req, res, next ) => {
+    try {
+        const hn = req.params.hn
+        console.log(hn)
+        const result = await vnService.getVnByHn(hn)
+        console.log('result getVnByhn', result)
+
+        res.status(200).json(result)
 
     } catch (err) {
         next(err)

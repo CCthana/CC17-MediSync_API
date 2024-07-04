@@ -72,4 +72,23 @@ doctorService.deleteDoctor = ( data ) => {
     });
 }
 
+doctorService.getAllDoctorByClinic = (id) => {
+    return prisma.doctor.findMany({
+        where: {clinicId: id},
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            clinicId: true
+        }
+    })
+}
+
+doctorService.getAdminDoctorData = (id) => {
+    return prisma.doctor.findFirst({
+        where: {id: id},
+        include: {clinic: true}
+    })
+}
+
 module.exports = doctorService

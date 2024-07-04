@@ -121,15 +121,17 @@ clinicController.updateClinic = async (req, res, next) => {
   }
 };
 
-clinicController.getAllClinic = async (req, res, next) => {
+clinicController.getAllClinic = async ( req, res, next ) => {
   try {
-    const reault = await clinicService.findAllClinic();
-    console.log("reault getAllClinic", reault);
-    res.status(200).json({ clinic: reault });
+      const result = await clinicService.findAllClinic()
+      // console.log('reault', result)
+      res.status(200).json({clinic: result})
   } catch (err) {
-    next(err);
+      next(err)
   }
-};
+}
+
+
 
 clinicController.adminGetAllClinic = async (req, res, next) => {
   try {

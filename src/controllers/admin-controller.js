@@ -1,6 +1,7 @@
 const adminService = require("../services/admin-service")
 const hashService = require("../services/hash-service")
 const jwtService = require("../services/jwt-service")
+const vnService = require("../services/vn-service")
 const createError = require("../utility/create-error")
 
 const adminController = {}
@@ -52,7 +53,9 @@ adminController.loginAdmin = async ( req, res, next) => {
             })
         }
 
-        const accessTokenAdmin = jwtService.sign({ id: existAdmin.id})
+        const accessTokenAdmin = jwtService.sign({ id: existAdmin.id,
+            doctorId: existAdmin.doctorId
+        })
         // console.log('accessTokenAdmin loginAdmin', accessTokenAdmin)
 
         res.status(200).json({ accessTokenAdmin })
@@ -64,5 +67,7 @@ adminController.loginAdmin = async ( req, res, next) => {
 adminController.getAdmin = async (req, res, next) => {
     res.status(200).json({admin: req.admin})
 }
+
+
 
 module.exports = adminController
