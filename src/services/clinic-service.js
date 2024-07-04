@@ -7,7 +7,23 @@ clinicService.findAllClinic = () => {
             id: true,
             name: true,
             detail: true,
-            image: true
+            image: true,
+            icon: true,
+            location: true
+        }
+    });
+}
+
+clinicService.adminFindAllClinic = () => {
+    return prisma.clinic.findMany({
+        select: {
+            id: true,
+            name: true,
+            detail: true,
+            image: true,
+            icon: true,
+            location: true,
+            updatedAt: true
         }
     });
 }
@@ -28,6 +44,12 @@ clinicService.updateClinic = (data) => {
     return prisma.clinic.update({
         where:{id: data.id},
         data
+    });
+}
+
+clinicService.adminDeleteClinic = (id) => {
+    return prisma.clinic.delete({
+        where:{id}
     });
 }
 

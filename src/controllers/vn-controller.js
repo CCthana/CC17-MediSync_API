@@ -7,7 +7,7 @@ const vnController = {}
 vnController.createVn = async ( req, res, next ) => {
     try {
         const data = req.body
-        data.vn = "VN" + Math.round(Math.random()* 100000000) + ""
+        data.vn = "VN" + Math.round(Math.random()* 1000000) + ""
 
         const exitsHN = await hnService.findHnByHn(data.hn)
         if (!exitsHN) {

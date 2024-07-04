@@ -14,6 +14,8 @@ const vnRouter = require('./src/routes/vn-route');
 const nurseRouter = require('./src/routes/nurse-route');
 const adminDoctorRouter = require('./src/routes/adminDoctor-route');
 const accountRouter = require('./src/routes/account-route');
+const authenticateAdmin = require('./src/middlewares/authenticateAdmin');
+const hrRouter = require('./src/routes/hr-route');
 
 const app = express();
 app.use(express.json());
@@ -25,16 +27,17 @@ app.use(express.json());
 
 // path admin potect
 app.use('/admin', adminRouter)
-app.use('/reception', receptionRouter)
-app.use('/nurse', nurseRouter)
-app.use('/adminDoctor', adminDoctorRouter)
-app.use('/account', accountRouter)
-app.use('/hn', hnRouter)
-app.use('/vn', vnRouter)
+app.use('/reception',authenticateAdmin, receptionRouter)
+app.use('/nurse',authenticateAdmin, nurseRouter)
+app.use('/adminDoctor',authenticateAdmin, adminDoctorRouter)
+app.use('/account',authenticateAdmin, accountRouter)
+app.use('/hn',authenticateAdmin, hnRouter)
+app.use('/vn',authenticateAdmin, vnRouter)
 
 // path public
 app.use('/clinic', clinicRouter)
 app.use('/doctor', doctorRouter)
+app.use('/hr', hrRouter)
 
 app.use(notFoundMiddlwware);
 app.use(errorMiddleware);

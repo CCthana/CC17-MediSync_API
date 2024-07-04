@@ -17,7 +17,15 @@ doctorService.findDoctorById = ( id ) => {
 }
 
 doctorService.findAllDoctor = () => {
-    return prisma.doctor.findMany();
+    return prisma.doctor.findMany({
+        include: {
+            clinic: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
 }
 
 doctorService.findAllDoctorActive = () => {
@@ -25,10 +33,16 @@ doctorService.findAllDoctorActive = () => {
         where: {isDeleted: false},
         select: {
             id: true,
-            clinicId: true,
+            clinic: {
+                select: {
+                    name: true
+                }
+            },
             firstName: true,
             lastName: true,
             image: true,
+            education: true
+
         }
     });
 }
@@ -40,14 +54,21 @@ doctorService.createDoctor = ( data ) => {
 doctorService.updateDoctor = ( data ) => {
     return prisma.doctor.update({
         where: { id: data.id },
-        data
+        data,
+        include: {
+            clinic: {
+                select: {
+                    name: true
+                }
+            }
+        }
     });
 }
 
-doctorService.deleteDoctor = ( id ) => {
+doctorService.deleteDoctor = ( data ) => {
     return prisma.doctor.update({
-        where: { id },
-        data: { isDeleted: true }
+        where: { id: data.id },
+        data
     });
 }
 
