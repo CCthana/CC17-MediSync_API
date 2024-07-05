@@ -169,6 +169,7 @@ model Package {
   detail    String?   @map("package_detail") @db.VarChar(1024)
   promotion DateTime? @map("package_promotion") @db.Date()
   price     Int?      @map("package_price")
+  expireDate DateTime? @db.Date()
 }
 
 model Career {
