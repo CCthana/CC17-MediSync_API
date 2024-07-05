@@ -35,7 +35,8 @@ app.use("/nurse", authenticateAdmin, nurseRouter);
 app.use("/adminDoctor", authenticateAdmin, adminDoctorRouter);
 app.use("/account", authenticateAdmin, accountRouter);
 app.use("/hn", authenticateAdmin, hnRouter);
-app.use("/vn", authenticateAdmin, vnRouter);
+// app.use("/vn", authenticateAdmin, vnRouter);
+app.use("/vn", vnRouter);
 app.use("/auth", authRouter);
 // path public
 app.use("/clinic", clinicRouter);
