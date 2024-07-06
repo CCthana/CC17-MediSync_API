@@ -7,66 +7,153 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
-
 model User {
-  id            Int       @id @default(autoincrement())
-  hn            String    @unique @db.VarChar(20)
-  password      String    @map("user_password") @db.VarChar(128)
-  firstName     String    @map("user_firstName") @db.VarChar(30)
-  lastName      String    @map("User_lastName") @db.VarChar(30)
-  phone         String?   @unique @map("user_phone") @db.VarChar(20)
-  email         String?   @unique @map("user_email") @db.VarChar(50)
-  address       String?   @map("user_address") @db.VarChar(256)
-  birthDate     DateTime? @db.Date
-  nationality   String?   @db.VarChar(30)
-  gender        Gender    @map("user_gender")
-  createdAt     DateTime  @default(now()) @db.Timestamp(0)
-  drugAllergies String?   @map("drug_allergies") @db.VarChar(128)
-  otp           String?
-  otpExpires    DateTime?
-
-  visitorNumbers      VisitorNumber[]
-  medicalCertificates MedicalCertificate[]
+  id                  Int                  @id @default(autoincrement())
+  hn                  String               @unique @db.VarChar(20)
+  password            String               @map("user_password") @db.VarChar(128)
+  firstName           String               @map("user_firstName") @db.VarChar(30)
+  lastName            String               @map("User_lastName") @db.VarChar(30)
+  phone               String?              @unique @map("user_phone") @db.VarChar(20)
+  email               String?              @unique @map("user_email") @db.VarChar(50)
+  address             String?              @map("user_address") @db.VarChar(256)
+  birthDate           DateTime?            @db.Date
+  nationality         String?              @db.VarChar(30)
+  gender              Gender               @map("user_gender")
+  createdAt           DateTime             @default(now()) @db.Timestamp(0)
+  drugAllergies       String?              @map("drug_allergies") @db.VarChar(128)
+  otp                 String?
+  otpExpires          DateTime?
   appointments        Appointment[]
+  medicalCertificates MedicalCertificate[]
+  visitorNumbers      VisitorNumber[]
 }
 
 model Clinic {
-  id        Int       @id @default(autoincrement())
-  name      String    @map("Clinic_name") @db.VarChar(50)
-  detail    String?   @map("Clinic_detail") @db.VarChar(2048)
-  image     String?   @map("Clinic_image") @db.VarChar(256)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @updatedAt @db.Timestamp(0)
-  icon      String?   @map("Clinic_icon") @db.VarChar(256)
-  location  String?   @map("location") @db.VarChar(128)
-
+  id             Int             @id @default(autoincrement())
+  name           String          @map("Clinic_name") @db.VarChar(50)
+  detail         String?         @map("Clinic_detail") @db.VarChar(2048)
+  createdAt      DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime?       @updatedAt @db.Timestamp(0)
+  icon           String?         @map("Clinic_icon") @db.VarChar(256)
+  image          String?         @map("Clinic_image") @db.VarChar(256)
+  location       String?         @map("location") @db.VarChar(128)
   doctors        Doctor[]
   visitorNumbers VisitorNumber[]
 }
 
 model Doctor {
-  id        Int       @id @default(autoincrement())
-  clinicId  Int?
-  firstName String    @map("Doctor_firstName") @db.VarChar(50)
-  lastName  String    @map("Doctor_lastName") @db.VarChar(50)
-  birthDate DateTime?
-  education String?   @db.VarChar(50)
-  image     String?   @db.VarChar(256)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @updatedAt @db.Timestamp(0)
-  isDeleted Boolean   @default(false)
-
-  clinic Clinic? @relation(fields: [clinicId], references: [id])
-
-  visitorNumbers      VisitorNumber[]
-  medicalCertificates MedicalCertificate[]
-  appointments        Appointment[]
+  id                  Int                  @id @default(autoincrement())
+  clinicId            Int?
+  firstName           String               @map("Doctor_firstName") @db.VarChar(50)
+  lastName            String               @map("Doctor_lastName") @db.VarChar(50)
+  birthDate           DateTime?
+  education           String?              @db.VarChar(50)
+  image               String?              @db.VarChar(256)
+  createdAt           DateTime             @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime?            @updatedAt @db.Timestamp(0)
+  isDeleted           Boolean              @default(false)
   admin               Admin[]
+  appointments        Appointment[]
+  clinic              Clinic?              @relation(fields: [clinicId], references: [id])
+  medicalCertificates MedicalCertificate[]
+  visitorNumbers      VisitorNumber[]
+
+  @@index([clinicId], map: "Doctor_clinicId_fkey")
+}
+
+model VisitorNumber {
+  id                  Int                  @id @default(autoincrement())
+  hn                  String
+  clinicId            Int?
+  doctorId            Int?
+  vn                  String               @unique @db.VarChar(20)
+  weight              Decimal?             @db.Decimal(10, 3)
+  height              Decimal?             @db.Decimal(10, 3)
+  heartRate           Decimal?             @db.Decimal(10, 3)
+  temperature         Decimal?             @db.Decimal(10, 3)
+  symptoms            String?              @db.VarChar(256)
+  treatmentResult     String?              @db.VarChar(1024)
+  diagnosis           String?              @db.VarChar(256)
+  medicine            String?              @db.VarChar(256)
+  totalPrice          Decimal?             @default(0.000) @db.Decimal(10, 3)
+  vnType              VnType?
+  createdAt           DateTime             @default(now()) @db.Timestamp(0)
+  summary             String?              @db.VarChar(256)
+  recipt              String?              @db.VarChar(256)
+  status              VnStatus             @default(QUEUE)
+  bloodPressure       String?              @db.VarChar(20)
+  medicalCertificates MedicalCertificate[]
+  clinic              Clinic?              @relation(fields: [clinicId], references: [id])
+  doctor              Doctor?              @relation(fields: [doctorId], references: [id])
+  user                User                 @relation(fields: [hn], references: [hn])
+
+  @@index([clinicId], map: "VisitorNumber_clinicId_fkey")
+  @@index([doctorId], map: "VisitorNumber_doctorId_fkey")
+  @@index([hn], map: "VisitorNumber_hn_fkey")
+}
+
+model MedicalCertificate {
+  id            Int           @id @default(autoincrement())
+  vn            String
+  hn            String
+  doctorId      Int
+  createdAt     DateTime      @default(now()) @db.Timestamp(0)
+  certificate   String?       @db.VarChar(256)
+  doctor        Doctor        @relation(fields: [doctorId], references: [id])
+  user          User          @relation(fields: [hn], references: [hn])
+  visitorNumber VisitorNumber @relation(fields: [vn], references: [vn])
+
+  @@index([doctorId], map: "MedicalCertificate_doctorId_fkey")
+  @@index([hn], map: "MedicalCertificate_hn_fkey")
+  @@index([vn], map: "MedicalCertificate_vn_fkey")
+}
+
+model Appointment {
+  id              Int               @id @default(autoincrement())
+  hn              String
+  doctorId        Int?
+  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
+  appointmentTime DateTime?         @db.Date
+  status          appointmentStatus
+  doctor          Doctor?           @relation(fields: [doctorId], references: [id])
+  user            User              @relation(fields: [hn], references: [hn])
+
+  @@index([doctorId], map: "Appointment_doctorId_fkey")
+  @@index([hn], map: "Appointment_hn_fkey")
+}
+
+model Admin {
+  id        Int       @id @default(autoincrement())
+  userName  String    @db.VarChar(50)
+  password  String    @db.VarChar(128)
+  role      adminRole
+  doctorId  Int?
+  firstName String?   @db.VarChar(50)
+  lastName  String?   @db.VarChar(50)
+  doctor    Doctor?   @relation(fields: [doctorId], references: [id])
+
+  @@index([doctorId], map: "Admin_doctorId_fkey")
+}
+
+model Package {
+  id        Int       @id @default(autoincrement())
+  name      String    @map("package_name") @db.VarChar(256)
+  image     String?   @map("package_image") @db.VarChar(512)
+  detail    String?   @map("package_detail") @db.VarChar(1024)
+  promotion DateTime? @map("package_promotion") @db.Date
+  price     Int?      @map("package_price")
+}
+
+model Career {
+  id       Int    @id @default(autoincrement())
+  name     String @map("career_name") @db.VarChar(256)
+  quantity Int?   @map("career_quantity")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
 
 enum VnType {
@@ -81,65 +168,10 @@ enum VnStatus {
   COMPPELETED
 }
 
-model VisitorNumber {
-  id              Int      @id @default(autoincrement())
-  hn              String
-  clinicId        Int?
-  doctorId        Int?
-  vn              String   @unique @db.VarChar(20)
-  weight          Decimal? @db.Decimal(10, 3)
-  height          Decimal? @db.Decimal(10, 3)
-  heartRate       Decimal? @db.Decimal(10, 3)
-  bloodPressure   String?  @db.VarChar(20)
-  temperature     Decimal? @db.Decimal(10, 3)
-  symptoms        String?  @db.VarChar(256)
-  treatmentResult String?  @db.VarChar(1024)
-  diagnosis       String?  @db.VarChar(256)
-  medicine        String?  @db.VarChar(256)
-  totalPrice      Decimal? @default(0) @db.Decimal(10, 3)
-
-  vnType    VnType?
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  summary   String?  @db.VarChar(256)
-  recipt    String?  @db.VarChar(256)
-  status    VnStatus @default(QUEUE)
-
-  user   User    @relation(fields: [hn], references: [hn])
-  clinic Clinic? @relation(fields: [clinicId], references: [id])
-  doctor Doctor? @relation(fields: [doctorId], references: [id])
-
-  medicalCertificates MedicalCertificate[]
-}
-
-model MedicalCertificate {
-  id          Int      @id @default(autoincrement())
-  vn          String
-  hn          String
-  doctorId    Int
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-  certificate String?  @db.VarChar(256)
-
-  user          User          @relation(fields: [hn], references: [hn])
-  visitorNumber VisitorNumber @relation(fields: [vn], references: [vn])
-  doctor        Doctor        @relation(fields: [doctorId], references: [id])
-}
-
 enum appointmentStatus {
   PENDING
   COMPELETED
   CANCELED
-}
-
-model Appointment {
-  id       Int    @id @default(autoincrement())
-  hn       String
-  doctorId Int?
-
-  createdAt       DateTime?         @default(now()) @db.Timestamp(0)
-  appointmentTime DateTime?         @db.Date
-  status          appointmentStatus
-  user            User              @relation(fields: [hn], references: [hn])
-  doctor          Doctor?           @relation(fields: [doctorId], references: [id])
 }
 
 enum adminRole {
@@ -148,31 +180,4 @@ enum adminRole {
   DOCTOR
   ACCOUNT
   ADMIN
-}
-
-model Admin {
-  id        Int       @id @default(autoincrement())
-  userName  String    @db.VarChar(50)
-  password  String    @db.VarChar(128)
-  role      adminRole
-  firstName String?   @db.VarChar(50)
-  lastName  String?   @db.VarChar(50)
-  doctorId  Int?
-
-  doctor Doctor? @relation(fields: [doctorId], references: [id])
-}
-
-model Package {
-  id        Int       @id @default(autoincrement())
-  name      String    @map("package_name") @db.VarChar(256)
-  image     String?   @map("package_image") @db.VarChar(512)
-  detail    String?   @map("package_detail") @db.VarChar(1024)
-  promotion DateTime? @map("package_promotion") @db.Date()
-  price     Int?      @map("package_price")
-}
-
-model Career {
-  id       Int    @id @default(autoincrement())
-  name     String @map("career_name") @db.VarChar(256)
-  quantity Int?   @map("career_quantity")
 }

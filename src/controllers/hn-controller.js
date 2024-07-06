@@ -15,7 +15,6 @@ hnController.createHN = async ( req, res, next ) => {
 
         const existHN = await hnService.findHnByNameOrPhoneOrEmail(data)
         
-
         if (existHN.length > 0) {
             createError({
                 message: 'HN already in use',

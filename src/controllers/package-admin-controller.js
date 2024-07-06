@@ -8,6 +8,7 @@ const adminPackageController = {};
 adminPackageController.getAllPackage = async (req, res, next) => {
   try {
     const package = await prisma.package.findMany();
+    console.log('package', package)
     res.status(200).json(package);
   } catch (err) {
     next(err);
@@ -39,8 +40,10 @@ adminPackageController.createPackage = async (req, res, next) => {
 };
 
 adminPackageController.updatePackage = async (req, res, next) => {
-  const { id } = req.params;
+  const id  = +req.params.id;
+  // console.log('id', id)
   const { name, detail, image, promotion, price } = req.body;
+  console.log('req.body', req.body)
 
   try {
     const updateData = {};
@@ -63,7 +66,9 @@ adminPackageController.updatePackage = async (req, res, next) => {
     }
 
     if (!isNaN(parseInt(price))) {
+      console.log('price', price)
       const packagePrice = parseInt(price);
+      console.log('packagePrice', packagePrice)
       updateData.price = packagePrice;
     }
 
@@ -74,8 +79,8 @@ adminPackageController.updatePackage = async (req, res, next) => {
       data: updateData,
     });
 
-    console.log("______________________", updatePackage);
-    res.status(201).json({ message: updatePackage });
+    // console.log("______________________", updatePackage);
+    res.status(201).json({ updatePackage });
   } catch (err) {
     next(err);
   }

@@ -32,26 +32,8 @@ doctorController.createDoctor = async (req, res, next) => {
       data.birthDate = new Date(data.birthDate);
     }
 
-    const promises = [];
-    if (req.files.image !== undefined) {
-      console.log("req.files.image", req.files.image);
-      const result = uploadService
-        .upload(req.files.image[0].path)
-        .then((url) => ({ url, key: "image" })); // เพิ่มเข้าไปเลย
-      promises.push(result);
-
-      const reesultAll = await Promise.all(promises);
-      const dataImage = reesultAll.reduce((acc, el) => {
-        acc[el.key] = el.url;
-        return acc;
-      }, {});
-
-      data.image = dataImage.image;
-      data.image === "null" && delete data.image;
-      await fs.unlink(req.files.image[0].path);
-    }
-
-    const createDoctor = await doctorService.createDoctor(data);
+    const createDoctor = await doctorService.createDoctor(data, req.files.image)
+    console.log('createDoctor', createDoctor)
     res.status(201).json({ message: "doctor created", createDoctor });
   } catch (err) {
     next(err);
@@ -172,3 +154,4 @@ doctorController.getAdminDoctorData = async (req, res, next) => {
     }
 }
 
+module.exports = doctorController

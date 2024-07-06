@@ -12,8 +12,6 @@ adminRouter.post('/register', adminController.createAdmin)
 adminRouter.post('/login', adminController.loginAdmin)
 adminRouter.get('/me',authenticateAdmin ,adminController.getAdmin)
 
-
-
 // admin สร้าง/แก้ไข/softDelete doctor
 adminRouter.post('/createDoctor', authenticateAdmin, upload.fields([
     { name: 'image', maxCount: 1}

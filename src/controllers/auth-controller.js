@@ -35,7 +35,7 @@ authController.login = async (req, res, next) => {
     const { email, password } = req.input;
 
     const existUser = await userService.findUserByEmail(email);
-
+    console.log('existUser', existUser)
     if (!existUser) {
       throw createError({
         message: "Invalid credentials",
@@ -73,18 +73,23 @@ authController.verifyOTP = async (req, res, next) => {
       });
     }
 
+    console.log('email', email)
+
     const user = await userService.findUserByEmail(email);
+
+    console.log('user', user)
     const accessToken = jwtService.sign({ id: user.id });
 
     res.status(200).json({ accessToken });
-  } catch (err) {
+  } catch (err) {5
     next(err);
   }
 };
 
 
 authController.getMe = async (req, res, next) => {
- 
+  console.log('req.user', req.user)
+  console.log('req.input', req.input)
   res.status(200).json({ user: req.user });
 };
 module.exports = authController;

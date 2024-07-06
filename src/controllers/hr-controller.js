@@ -1,4 +1,5 @@
 const hrService = require("../services/hr-service");
+const fs = require("fs/promises");
 
 const hrController = {}
 
@@ -15,6 +16,8 @@ hrController.sendEmail = async (req, res, next) => {
         
     } catch (err) {
         console.log('err sendEmail', err)
+    } finally {
+        await fs.unlink(req.files.cv[0].path)
     }
 }
 
