@@ -56,9 +56,20 @@ model Doctor {
   appointments        Appointment[]
   clinic              Clinic?              @relation(fields: [clinicId], references: [id])
   medicalCertificates MedicalCertificate[]
-  visitorNumbers      VisitorNumber[]
+  appointments        Appointment[]
+  admin               Admin[]
+}
 
-  @@index([clinicId], map: "Doctor_clinicId_fkey")
+enum VnType {
+  OPD
+  ADMIT
+}
+
+enum VnStatus {
+  QUEUE
+  TREATMENT
+  PAYMENT
+  COMPELETED
 }
 
 model VisitorNumber {
@@ -142,6 +153,7 @@ model Package {
   detail    String?   @map("package_detail") @db.VarChar(1024)
   promotion DateTime? @map("package_promotion") @db.Date
   price     Int?      @map("package_price")
+  expireDate DateTime? @db.Date()
 }
 
 model Career {
