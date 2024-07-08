@@ -95,7 +95,6 @@ model VisitorNumber {
   symptoms        String?  @db.VarChar(256)
   treatmentResult String?  @db.VarChar(1024)
   diagnosis       String?  @db.VarChar(256)
-  medicine        String?  @db.VarChar(256)
   totalPrice      Decimal? @default(0) @db.Decimal(10, 3)
 
   vnType    VnType?
@@ -109,8 +108,9 @@ model VisitorNumber {
   doctor Doctor? @relation(fields: [doctorId], references: [id])
 
   medicalCertificates MedicalCertificate[]
+  medicineOrders MedicineOrder[]
+  
 }
-
 model MedicalCertificate {
   id          Int      @id @default(autoincrement())
   vn          String
@@ -177,3 +177,26 @@ model Career {
   name     String @map("career_name") @db.VarChar(256)
   quantity Int?   @map("career_quantity")
 }
+
+model Medicine {
+    id       Int    @id @default(autoincrement())
+    name String @map("medicine_name") @db.VarChar(256)
+    stock Int?   @map("medicine_stock")
+    price  Decimal? @db.Decimal(10, 3)
+
+    medicineOrders MedicineOrder[]
+
+}
+
+model MedicineOrder {
+  id       Int    @id @default(autoincrement())
+  vn String
+  medicineId Int
+  quantity Int
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+
+  visitorNumber VisitorNumber? @relation(fields: [vn], references: [vn])
+  medicine Medicine @relation(fields: [medicineId], references: [id])
+}
+
+
