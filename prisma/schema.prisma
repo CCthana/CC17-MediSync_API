@@ -78,7 +78,7 @@ enum VnStatus {
   QUEUE
   TREATMENT
   PAYMENT
-  COMPPELETED
+  COMPELETED
 }
 
 model VisitorNumber {
@@ -163,12 +163,12 @@ model Admin {
 }
 
 model Package {
-  id         Int       @id @default(autoincrement())
-  name       String    @map("package_name") @db.VarChar(256)
-  image      String?   @map("package_image") @db.VarChar(512)
-  detail     String?   @map("package_detail") @db.VarChar(1024)
-  promotion  DateTime? @map("package_promotion") @db.Date()
-  price      Int?      @map("package_price")
+  id        Int       @id @default(autoincrement())
+  name      String    @map("package_name") @db.VarChar(256)
+  image     String?   @map("package_image") @db.VarChar(512)
+  detail    String?   @map("package_detail") @db.VarChar(1024)
+  promotion DateTime? @map("package_promotion") @db.Date()
+  price     Int?      @map("package_price")
   expireDate DateTime? @db.Date()
 }
 
