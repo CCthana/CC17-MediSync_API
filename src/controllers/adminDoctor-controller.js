@@ -1,4 +1,5 @@
 const appointmentService = require("../services/appointment-service")
+const medicineService = require("../services/medicine-service")
 const vnService = require("../services/vn-service")
 const createError = require("../utility/create-error")
 
@@ -45,4 +46,29 @@ adminDoctorController.createAppointmentByDoctor = async (req, res, next) => {
     }
 }
 
+adminDoctorController.updateVnAndOrderMed = async (req, res, next) => {
+    try {
+       const data = req.body
+       const doctorId = +data.doctorId 
+       const medicine = data.medicine
+       const id = +data.id
+
+       if (data.status !== "PAYMENT") {
+        data.status = "PAYMENT"
+    }
+ 
+       delete data.medicine
+       delete data.id
+
+       console.log(">>>>>>>>>>>>>>>>>>>>",data)
+
+       console.log("/////////// medicine /////////////", medicine)
+ 
+       const result = await medicineService.createMedOrderAndUpdateVN(data, doctorId, medicine, id)
+ 
+       res.status(201).json(result)
+    } catch (err) {
+       next(err)
+    }
+ }
 module.exports = adminDoctorController
