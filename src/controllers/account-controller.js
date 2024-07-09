@@ -5,12 +5,13 @@ const accountController = {}
 
 accountController.updateTotalPriceVnByVn = async ( req, res, next ) => {
     try {
-        const id = +req.body.id
+        const id = req.body.id
         const data = req.body
+        console.log(id);
         delete data.id
 
-        if (data.status !== "COMPPELETED") {
-            data.status = "COMPPELETED"
+        if (data.status !== "COMPELETED") {
+            data.status = "COMPELETED"
         }
         console.log("++++ data +++++",data)
         console.log("++++ id +++++",id)
