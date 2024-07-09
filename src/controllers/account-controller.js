@@ -3,30 +3,49 @@ const createError = require("../utility/create-error")
 
 const accountController = {}
 
-accountController.updateTotalPriceVnByVn = async ( req, res, next ) => {
+accountController.updateTotalPriceVnByVn = async (req, res, next) => {
     try {
-        const id = req.body.id
-        const data = req.body
-        console.log(id);
-        delete data.id
-
-        if (data.status !== "COMPELETED") {
-            data.status = "COMPELETED"
-        }
-        console.log("++++ data +++++",data)
-        console.log("++++ id +++++",id)
-        
-        const result = await vnService.updateVnByVn(id, data)
-        console.log('result updateTotalPriceVnByVn', result)
-
-        
-
-
-        res.status(200).json({ updateVn: result })
-
+      console.log(req.files);
+      if (!req.files || Object.keys(req.files).length === 0) {
+        throw createError(400, "Files are required");
+      }
+  
+      const pdfUrls = {};
+      for (const field in req.files) {
+        const file = req.files[field][0];
+        const pdfUrl = await uploadService.upload(file.path);
+        pdfUrls[field] = pdfUrl;
+      }
+  
+      const id = parseInt(req.body.id);
+      const totalPrice = parseFloat(req.body.totalPrice);
+  
+      const summaryUrl = pdfUrls["medicalCertificate"];
+      const recieptUrl = pdfUrls["receipt"];
+  
+      // Data to be updated in the visitor number table
+      const updateData = {
+        totalPrice: totalPrice,
+        status: "COMPPELETED",
+        summary: summaryUrl,
+        recipt: recieptUrl,
+      };
+  
+      // Update visitornumber table using vnService
+      const updatedVisitorNumber = await vnService.updateVnByVn(id, updateData);
+  
+      
+      res.status(200).json({ updateVn: updatedVisitorNumber, pdfUrls });
     } catch (err) {
-        next(err)
+      next(err);
+    } finally {
+      if (req.files) {
+        for (const field in req.files) {
+          const file = req.files[field][0];
+          await fs.unlink(file.path);
+        }
+      }
     }
-}
-
+  };
+  
 module.exports = accountController
