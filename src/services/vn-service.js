@@ -62,6 +62,11 @@ vnService.getAllVnByStatusPayment = () => {
     return prisma.visitorNumber.findMany({
         where:{ status: "PAYMENT" },
         include: { 
+            medicineOrders: {
+                include: {
+                    medicine: true
+                }
+            },
             user: {
                 select:{
                     hn: true,
@@ -75,7 +80,7 @@ vnService.getAllVnByStatusPayment = () => {
                     nationality: true,
                     appointments: {
                         where: {status: "PENDING"}
-                    }
+                    },
                 },
             },
             clinic: true,

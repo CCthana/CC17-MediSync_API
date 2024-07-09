@@ -19,8 +19,12 @@ const accountRouter = require("./src/routes/account-route");
 const userRouter = require("./src/routes/user-route");
 const authRouter = require("./src/routes/auth-route");
 const authenticateAdmin = require("./src/middlewares/authenticateAdmin");
+<<<<<<< HEAD
 const hrRouter = require('./src/routes/hr-route');
 const adminPackageRouter = require("./src/routes/package-admin-route");
+=======
+const medicineRoute = require("./src/routes/medicine-route");
+>>>>>>> d1da4e828c8d91acc3c8d4bb8dc54a6d60441a24
 
 const app = express();
 app.use(express.json());
@@ -38,6 +42,7 @@ app.use("/adminDoctor", authenticateAdmin, adminDoctorRouter);
 app.use("/account", authenticateAdmin, accountRouter);
 app.use("/hn", authenticateAdmin, hnRouter);
 app.use("/vn", authenticateAdmin, vnRouter);
+app.use("/medicine", authenticateAdmin, medicineRoute)
 app.use("/auth", authRouter);
 app.use("/package", adminPackageRouter)
 
