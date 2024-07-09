@@ -19,6 +19,7 @@ const accountRouter = require("./src/routes/account-route");
 const userRouter = require("./src/routes/user-route");
 const authRouter = require("./src/routes/auth-route");
 const authenticateAdmin = require("./src/middlewares/authenticateAdmin");
+const medicineRoute = require("./src/routes/medicine-route");
 
 const app = express();
 app.use(express.json());
@@ -35,8 +36,8 @@ app.use("/nurse", authenticateAdmin, nurseRouter);
 app.use("/adminDoctor", authenticateAdmin, adminDoctorRouter);
 app.use("/account", authenticateAdmin, accountRouter);
 app.use("/hn", authenticateAdmin, hnRouter);
-// app.use("/vn", authenticateAdmin, vnRouter);
-app.use("/vn", vnRouter);
+app.use("/vn", authenticateAdmin, vnRouter);
+app.use("/medicine", authenticateAdmin, medicineRoute)
 app.use("/auth", authRouter);
 // path public
 app.use("/clinic", clinicRouter);

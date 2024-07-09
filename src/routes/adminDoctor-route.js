@@ -8,7 +8,7 @@ const adminDoctorRouter = express.Router()
 adminDoctorRouter.get('/getTreatmentVnByDocTor/:doctorId', vnController.getTreatmentVnByDocTor)
 adminDoctorRouter.get('/getAdminDoctorData/:doctorId', doctorController.getAdminDoctorData)
 
-adminDoctorRouter.patch('/updateVnById', adminDoctorController.updateVnById)
+adminDoctorRouter.patch('/updateVnById', adminDoctorController.updateVnAndOrderMed)
 adminDoctorRouter.post('/createAppointmentByDoctor', adminDoctorController.createAppointmentByDoctor)
 
 module.exports = adminDoctorRouter
