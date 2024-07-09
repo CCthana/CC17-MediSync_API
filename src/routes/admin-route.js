@@ -22,15 +22,15 @@ adminRouter.patch('/updateDoctor', authenticateAdmin, upload.fields([
 adminRouter.patch('/deleteDoctor', authenticateAdmin, doctorController.deleteDoctor)
 
 // admin สร้าง/แก้ไข clinic
-adminRouter.post('/createClinic', upload.fields([
+adminRouter.post('/createClinic', authenticateAdmin, upload.fields([
     { name: 'icon', maxCount: 1}, { name: 'image', maxCount: 1}
 ]), clinicController.createClinic)
 
-adminRouter.patch('/updateClinic', upload.fields([
+adminRouter.patch('/updateClinic', authenticateAdmin, upload.fields([
     { name: 'icon', maxCount: 1}, { name: 'image', maxCount: 1}
 ]), clinicController.updateClinic)
 
-adminRouter.get('/getAllClinic', clinicController.adminGetAllClinic)
+adminRouter.get('/getAllClinic', authenticateAdmin, clinicController.adminGetAllClinic)
 adminRouter.delete('/deleteClinic/:id', clinicController.adminDeleteClinic)
 
 

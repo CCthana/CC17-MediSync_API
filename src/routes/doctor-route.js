@@ -6,6 +6,7 @@ const doctorRouter = express.Router()
 
 doctorRouter.get('/getAllDoctor', authenticateAdmin, doctorController.getAllDoctor)
 doctorRouter.get('/getAllDoctorActive', doctorController.getAllDoctorActive)
+doctorRouter.get('/doctorActiveByClinic/:clinicId', doctorController.getAllDoctorByClinic)
 
 
 module.exports = doctorRouter  

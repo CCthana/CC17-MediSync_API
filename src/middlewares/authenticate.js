@@ -18,7 +18,7 @@ const authenticate = async (req, res, next) => {
       const accessToken = authorization.split(" ")[1];
 
       const payload = jwtService.verify(accessToken);
-      console.log('payload', payload)
+      console.log('payload user', payload)
 
       const user = await userService.findUserById(payload.id);
 

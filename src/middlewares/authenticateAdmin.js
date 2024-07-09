@@ -18,7 +18,7 @@ const authenticateAdmin = async (req, res, next) => {
         const accessTokenAdmin = authorization.split(' ')[1]
         // console.log('accessTokenAdmin' , accessTokenAdmin)
         const payload = jwtService.verify(accessTokenAdmin)
-        
+        console.log('payload', payload)
         const admin = await adminService.findAdimById(payload.id)
         // console.log('admin', admin)
         if (!admin) {

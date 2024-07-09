@@ -11,9 +11,9 @@ hrController.sendEmail = async (req, res, next) => {
         const attachmentPath = req.files.cv[0].path;
         const attachmentFilename = req.files.cv[0].originalname;
 
-        hrService.sendEmail(attachmentPath, attachmentFilename, data)
-        res.status(200).json({ message: 'send Email success'})
+        await hrService.sendEmail(attachmentPath, attachmentFilename, data)
         
+        res.status(200).json({ message: 'send Email success'})
     } catch (err) {
         console.log('err sendEmail', err)
     } finally {

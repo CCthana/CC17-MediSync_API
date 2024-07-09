@@ -103,12 +103,15 @@ doctorService.deleteDoctor = ( data ) => {
 
 doctorService.getAllDoctorByClinic = (id) => {
     return prisma.doctor.findMany({
-        where: {clinicId: id},
+        where: {clinicId: id,
+            isDeleted: false
+        },
         select: {
             id: true,
             firstName: true,
             lastName: true,
-            clinicId: true
+            clinicId: true,
+            image: true
         }
     })
 }
