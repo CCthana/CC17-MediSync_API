@@ -1,5 +1,7 @@
-const vnService = require("../services/vn-service")
-const createError = require("../utility/create-error")
+const vnService = require("../services/vn-service");
+const uploadService = require("../services/upload-service");
+const createError = require("../utility/create-error");
+const fs = require("fs").promises;
 
 const accountController = {}
 
@@ -26,7 +28,7 @@ accountController.updateTotalPriceVnByVn = async (req, res, next) => {
       // Data to be updated in the visitor number table
       const updateData = {
         totalPrice: totalPrice,
-        status: "COMPPELETED",
+        status: "COMPELETED",
         summary: summaryUrl,
         recipt: recieptUrl,
       };
