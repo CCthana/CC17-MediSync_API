@@ -116,6 +116,12 @@ vnService.getReciptAndMedicalCertificatePDFByVN = (vn, hn) => {
 }
 
 
+vnService.getVnPerDay = (day) => {
+    return prisma.visitorNumber.findMany({
+        where:{createdAt: day}
+    });
+}
+
 
 
 

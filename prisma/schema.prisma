@@ -199,4 +199,3 @@ model MedicineOrder {
   medicine Medicine @relation(fields: [medicineId], references: [id])
 }
 
-

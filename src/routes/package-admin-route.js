@@ -12,7 +12,7 @@ adminPackageRouter.post(
   adminPackageController.createPackage
 );
 
-adminPackageRouter.patch("/:id", adminPackageController.updatePackage);
+adminPackageRouter.patch("/:id", upload.single("image"), adminPackageController.updatePackage);
 
 adminPackageRouter.delete("/:id", adminPackageController.deletePackage);
 

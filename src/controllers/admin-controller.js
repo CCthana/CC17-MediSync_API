@@ -1,7 +1,6 @@
 const adminService = require("../services/admin-service")
 const hashService = require("../services/hash-service")
 const jwtService = require("../services/jwt-service")
-const vnService = require("../services/vn-service")
 const createError = require("../utility/create-error")
 
 const adminController = {}

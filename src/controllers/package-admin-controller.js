@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const uploadService = require("../services/upload-service");
+const fs = require("fs/promises");
 
 const prisma = new PrismaClient();
 
@@ -15,22 +16,32 @@ adminPackageController.getAllPackage = async (req, res, next) => {
 };
 
 adminPackageController.createPackage = async (req, res, next) => {
-  const { name, detail, promotion, price } = req.body;
-
   try {
-    const image = await uploadService.upload(req.file.path);
+    const data = req.body;
 
-    const promotionDate = new Date(promotion);
-    const packagePrice = parseInt(price);
+    data.expireDate = new Date(data.expireDate);
+    data.price = parseInt(data.price);
+
+    const promises = [];
+    if (req.file !== undefined) {
+      const result = uploadService
+        .upload(req.file.path)
+        .then((url) => ({ url, key: "image" }));
+      promises.push(result);
+
+      const reesultAll = await Promise.all(promises);
+      const dataImage = reesultAll.reduce((acc, el) => {
+        acc[el.key] = el.url;
+        return acc;
+      }, {});
+
+      data.image = dataImage.image;
+      data.image === "null" && delete data.image;
+      await fs.unlink(req.file.path);
+    }
 
     const newPackage = await prisma.package.create({
-      data: {
-        name,
-        detail,
-        image,
-        promotion: promotionDate,
-        price: packagePrice,
-      },
+      data
     });
     res.status(201).json({ message: newPackage });
   } catch (err) {
@@ -39,43 +50,66 @@ adminPackageController.createPackage = async (req, res, next) => {
 };
 
 adminPackageController.updatePackage = async (req, res, next) => {
-  const { id } = req.params;
-  const { name, detail, image, promotion, price } = req.body;
+
+  const id  = +req.params.id;
+  const data = req.body;
 
   try {
-    const updateData = {};
+    // const updateData = {};
 
-    if (name !== undefined) {
-      updateData.name = name;
+    // if (data.name !== undefined) {
+    //   updateData.name = data.name;
+    // }
+
+    // if (detail !== undefined) {
+    //   updateData.detail = detail;
+    // }
+
+    // if (image !== undefined) {
+    //   updateData.image = image;
+    // }
+
+    if (data.expireDate !== undefined) {
+      data.expireDate = new Date(data.expireDate);
+      // updateData.expireDate = packageExpireDate;
     }
 
-    if (detail !== undefined) {
-      updateData.detail = detail;
+    const promises = [];
+    if (req.file !== undefined) {
+      const result = uploadService
+        .upload(req.file.path)
+        .then((url) => ({ url, key: "image" }));
+      promises.push(result);
+
+      const reesultAll = await Promise.all(promises);
+      const dataImage = reesultAll.reduce((acc, el) => {
+        acc[el.key] = el.url;
+        return acc;
+      }, {});
+
+      data.image = dataImage.image;
+      data.image === "null" && delete data.image;
+      await fs.unlink(req.file.path);
     }
 
-    if (image !== undefined) {
-      updateData.image = image;
-    }
+    console.log('data', data)
 
-    if (promotion !== undefined) {
-      const packagePromotion = new Date(promotion);
-      updateData.promotion = packagePromotion;
-    }
-
-    if (!isNaN(parseInt(price))) {
-      const packagePrice = parseInt(price);
-      updateData.price = packagePrice;
+    if (!isNaN(parseInt(data.price))) {
+      // console.log('price', price)
+      data.price = parseInt(data.price);
+      // console.log('packagePrice', packagePrice)
+      // updateData.price = packagePrice;
     }
 
     // console.log("Update Data: ", updateData);
 
     const updatePackage = await prisma.package.update({
       where: { id: +id },
-      data: updateData,
+      data
     });
 
-    console.log("______________________", updatePackage);
-    res.status(201).json({ message: updatePackage });
+    // console.log("______________________", updatePackage);
+    res.status(200).json({ updatePackage });
   } catch (err) {
     next(err);
   }
