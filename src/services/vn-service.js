@@ -104,6 +104,17 @@ vnService.getVnByHn = (hn) => {
         where:{hn}
     });
 }
+vnService.getReciptAndMedicalCertificatePDFByVN = (vn, hn) => {
+    return prisma.visitorNumber.findFirst({
+        where: {
+            AND: [
+                { vn: vn },
+                { hn: hn }
+            ]
+        }
+    });
+}
+
 
 vnService.getVnPerDay = (day) => {
     return prisma.visitorNumber.findMany({
