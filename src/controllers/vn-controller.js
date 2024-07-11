@@ -121,5 +121,20 @@ vnController.getVnByHn = async ( req, res, next ) => {
     }
 }
 
+vnController.getVnPerDay = async ( req, res, next ) => {
+    try {
+        const day =  new Date(req.params.day)
+        
+        console.log(day)
+        const result = await vnService.getVnPerDay(day)
+        console.log('result getVnByhn', result)
+
+        res.status(200).json(result)
+
+    } catch (err) {
+        next(err)
+    }
+}
+
 
 module.exports = vnController

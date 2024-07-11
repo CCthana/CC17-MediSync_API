@@ -7,6 +7,7 @@ const receptionController = {}
 receptionController.getAppointmentByHn = async (req, res, next) => {
    try {
       const hn = req.params.hn
+      console.log('hn', hn)
       const result = await appointmentService.getAppointmentByHn(hn)
 
       res.status(200).json(result)

@@ -105,6 +105,12 @@ vnService.getVnByHn = (hn) => {
     });
 }
 
+vnService.getVnPerDay = (day) => {
+    return prisma.visitorNumber.findMany({
+        where:{createdAt: day}
+    });
+}
+
 
 
 
