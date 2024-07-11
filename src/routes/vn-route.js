@@ -9,6 +9,6 @@ vnRouter.get('/getVnByVn', vnController.getVnByVn)
 vnRouter.post('/getMedicalCertificate',vnController.getMedicalCertificatePDFFromVN)
 vnRouter.post('/getReceipt',vnController.getReceiptPDFFromVN)
 
-vnRouter.get('/getVnPerDay/:day', vnController.getVnPerDay)
+// vnRouter.get('/getVnPerDay/:day', vnController.getVnPerDay)
 
 module.exports = vnRouter
