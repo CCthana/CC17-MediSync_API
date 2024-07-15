@@ -14,6 +14,7 @@ userRouter.patch('/:hn')
 userRouter.get('/getalluservnbyhn/:hn', authenticate, userController.getAllUserVnByHn)
 userRouter.get('/appointment/:hn', authenticate, userController.getAppointmentByHn)
 userRouter.patch('/updateUserAccount', authenticate, userController.updateUserAccount)
+userRouter.post('/createHN', userController.createHN)
 
 
 module.exports = userRouter;

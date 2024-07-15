@@ -43,6 +43,37 @@ userController.getAllUserVnByHn = async (req, res, next) => {
    }
 };
 
+userController.createHN = async (req, res, next) => {
+   try {
+        
+      const data = req.body
+      console.log(data)
+      data.password = '123456'
+      data.hn = "HN" + Math.round(Math.random()* 1000000) + ""
+      data.birthDate = new Date(data.birthDate)
+
+      const existHN = await hnService.findHnByNameOrPhoneOrEmail(data)
+      
+      if (existHN.length > 0) {
+          createError({
+              message: 'HN already in use',
+              statusCode: 400
+          })
+      }
+
+      const hashPassword = await hashService.hash(data.password)
+      data.password = hashPassword;
+
+      const result = await hnService.createHn(data)
+      delete result.password
+   
+      res.status(201).json(result)
+
+  } catch (err) {
+      next(err)
+  }
+};
+
 userController.updateUserAccount = async (req, res, next) => {
    try {
     
