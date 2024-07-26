@@ -6,7 +6,7 @@ hrService.sendEmail = (attachmentPath, attachmentFilename, data) => {
     return new Promise((resolve, reject) => {
         const mailOptions = {
             from: process.env.GMAIL_HR,
-            to: 'gecko.jeng@gmail.com',
+            to: 'medisyncweb@gmail.com',
             subject: `สมัครงานตำแหน่ง ${data.position}`,
             html: `<p>ชื่อผู้สมัคร: <strong>${data.firstname} ${data.lastname}</strong> อายุ <strong>${data.age}</strong></p>
                 <p>Email: <strong>${data.email}</strong></p><p>เบอร์ติดต่อ: <strong>${data.phone}</strong></p>
